@@ -1,0 +1,13 @@
+<project name="My Thesis" version="docear 1.0" ID="14FF901780C2R5QBIU4JO77BGQX6SGTPBOF8">
+<folder type="library" name="Library">
+<link type="literature_annotations" name="Literature &amp; Annotations" path="project://14FF901780C2R5QBIU4JO77BGQX6SGTPBOF8/_data/14FF901780C2R5QBIU4JO77BGQX6SGTPBOF8/default_files/literature_and_annotations.mm"/>
+<link type="file" name="Temp" path="project://14FF901780C2R5QBIU4JO77BGQX6SGTPBOF8/_data/14FF901780C2R5QBIU4JO77BGQX6SGTPBOF8/default_files/temp.mm" system="true"/>
+<link type="file" name="Trash" path="project://14FF901780C2R5QBIU4JO77BGQX6SGTPBOF8/_data/14FF901780C2R5QBIU4JO77BGQX6SGTPBOF8/default_files/trash.mm" system="true"/>
+</folder>
+<folder type="physical" name="My drafts" path="project://14FF901780C2R5QBIU4JO77BGQX6SGTPBOF8/_data/14FF901780C2R5QBIU4JO77BGQX6SGTPBOF8/My%20Drafts/"/>
+<folder type="literature_repository" name="Literature repository" system="true">
+<folder type="repository_path" name="default" path="file:/D:/Ivan/_flash%20backup%202014/TEX/thesis//literature_repository"/>
+<folder type="repository_path" name="DEPRON" path="project://14FF901780C2R5QBIU4JO77BGQX6SGTPBOF8/../../SINP/DEPRON/"/>
+</folder>
+<link type="references" name="References" path="project://14FF901780C2R5QBIU4JO77BGQX6SGTPBOF8/biblio/othercites.bib" system="true"/>
+</project>
