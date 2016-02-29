@@ -97,9 +97,65 @@ EVARM детектор MOSFET
 
 
 \subsubsection{полупроводниковый телескоп DOSTEL }
-\\
+
 DOSTEL -- Дозиметрический телескоп был разработан в 1995 году как малый телескоп частиц для использования на миссиях космических шаттлов к космической станции МИР. Прибор включает в себя два кремниевых детектора по технологии PIPS, расположенных как телескоп [Beaujean, R., и др. 2002]. Каждый детектор имеет толщину 0,315 мм с чувствительной зоной 6,93 см2, зазор в 15 мм между детекторами дает геометрический фактор 824 см\textsuperscript{2}ср (единица измерения определяется чувствительной площадью детектора и полем зрения) для детектирования совпадающих событий [Beaujean, R., и др. 2002]. Каждый детектор соединен с зарядочувствительным усилителем через интегрирующую емкость, двух стадийным усилителем импульсов, двумя пиковыми детекторами, двумя RC-фильтрами для снижения уровня шумов и 8-ми битным АЦП. Такая компоновка позволяет поводить анализ амплитуд импульсов отдельно для высокого и для низкого энергетического диапазона [Beaujean, R., и др. 2002].
 
 
 Когда совпадающее событие записано обоими детекторами, становится возможным определить ЛПЭ падающего излучения. Так как известно, что траектория частицы ограничена конусом возможных направлений, средняя толщина детектора может быть использована для оценки длины трека частицы. Делением энерговыделения на среднюю длину свободного пробега, для данного детектора 0,364 мм [Beaujean, R., и др. 2002] с плотностью 2,33 г/см\textsuperscript{3} [Knoll GF, Radiation detection and measurement, third edition, Wiley: 2000, p802  на странице 357]  можно получить приближенное значение ЛПЭ. Результат таких вычислений нормируется на известный коэффициент для перехода от ЛПЭ кремнии к ЛПЭ в воде, таким образом прибор DOSTEL записывает ЛПЭ в диапазоне от 0,1 до 240 кэВ/мкм [Beaujean, R., Kopp, J., Burmeister, S., et al. Dosimetry inside MIR station using a silicon detector telescope (DOSTEL). Radiation Measurements 35, 433--438, 2002].
+
+\todo{дописать}{
+
+RRMD-III Determines path length with PSDs [Doke et al. (2001, 2004)]
+
+
+Liulin-5 Assumes mean-chord-length across FOV in LET calculation [Semkova et al. (2004, 2007)]
+
+
+Liulin Phobos Assumes mean-chord-length; orthogonal telescopes [Dachev et al. (2009)]
+
+
+CPDS Determines path length with PSDs; can determine species for C, N, and O particles [Lee et al. (2007)]
+
+
+TEPC Assumes mean-chord-length for all angles; LET assumed equal to y (Lineal energy) [Badhwar et al. (1996), Gersey et al.(2002, 2007)]
+
+
+R-16 Pulse-type ion chamber: 1 pulse per 5 mrad; shallow and deep dose rates; assumes average LET [Mitricas et al. (2002), Badhwar (2000)]
+
+
+BBND Heavy system; short-term experiment; requires 3He Koshiishi et al. (2007), Matsumoto et al. (2001)}
+
+\section{Математическое моделирование дозиметрических проборов для космических условий}
+
+Математическое моделирование широко применяется на всех этапах создания исследовательских проборов предназначенных для использования в условиях космоса. В первую очередь оно необходимо на этапе проектирования аппаратуры для выбора характеристик регистрирующих радиацию модулей исходя из поставленных экспериментальных задач [{\footnotesize Luszik-Bhadra M. }{\footnotesize et}{\footnotesize . }{\footnotesize al}{\footnotesize .}{\footnotesize ,}{\footnotesize  2009, }{\footnotesize Hassler}{\footnotesize  }{\footnotesize D}{\footnotesize   }{\footnotesize et}{\footnotesize . }{\footnotesize al}{\footnotesize .}{\footnotesize ,}{\footnotesize  2008}{\footnotesize ]}. На последующих шагах разработки аппаратуры математические методы используются при верификации результатов калибровочных и градуировочных испытаний на источниках ИИ и ускорителях заряженных частиц [Zeitlin C. {\footnotesize et}{\footnotesize . }{\footnotesize al}{\footnotesize .}{\footnotesize ,}{\footnotesize  20}{\footnotesize 10}]. Также одним из основных применений является уточнение функции отклика прибора во время штатной работы [C. Zeitlin {\footnotesize et}{\footnotesize . }{\footnotesize al}{\footnotesize .}{\footnotesize ,}{\footnotesize  20}{\footnotesize 10}]. 
+
+
+Среди математических методов моделирования взаимодействия ИИ и нейтральных излечений с материалами и детектирующими модулями приборов следует отметить наиболее используемые программные пакеты, основанные на методе Монте-Карло:
+
+
+\begin{description}
+	\item[GEANT4] description
+	\item[SHIELD] description	
+	\item[PHITS] description
+	\item[FLUKA] description
+\end{description}
+
+\subsection{GEANT4}
+
+Данная система математического моделирования разрабатывается для нужд работы ЦЕРН и активно используется в ряде областей науки, медицины и технологии.
+
+
+\subsection{FLUKA}
+
+
+
+
+\subsection{SHIELD}
+
+
+\section{Возможности КА Ломоносов в продолжении ряда российских исследований радиационной обстановки}
+
+На каждом российском пилотируемом корабле со времен первого полета человека в космос устанавливались дозиметрические приборы, изготовленные в НИИЯФ МГУ, полный список и результаты этих экспериментов можно найти в монографии Ю.И. Логачева 2007г.
+
+
 
