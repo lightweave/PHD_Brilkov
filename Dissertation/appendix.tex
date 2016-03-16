@@ -273,17 +273,41 @@
 
 Измерение времени выполнения блоков происходит с помощью таймера прибора TC1. Информация записывается последовательно в блоки данных ДЭПРОН Т, каждый пакет имеет размер 4 байта, первые два байта отведены под идентификационные символы, последние два байта содержат накопленное значение таймера TC1, который настроен на работы с частотой 20 МГц.
 
-
-{\small Данные (RECORD)Пакет таймера 1Пакет таймера 2\ldots{}\ldots{}\ldots{}\ldots{}Пакет таймера 2Символ 1Символ 2Значение таймера1 байт1 байт2 байт4 байт4 байт}
-
-
-
-
-
+\footnotesize
+\begin{center}
+	\begin{tabularx}{\textwidth}{|*5{c|}*6{X|}} \hline
+		\multicolumn{11}{|c|}{Данные (RECORD)}\\ \hline
+		\multicolumn{3}{|c|}{Пакет таймера 1} &Пакет таймера 2&Пакет таймера 3&&&&&&\\ \cline{1-3}
+		Символ 1&Символ 2&Значение таймера&&&&&&&&\\ \hline
+		1 байт&1 байт&2 байта&4 байат&4 байта&&&&&&\\ \hline
+	\end{tabularx}  
+\end{center}
+\normalsize
 Таблица определения выполненных блоков по маркирующим символам пакета таймера.
+\small
+\begin{center}
+	\begin{tabularx}{\textwidth}{|c|c|X|} \hline
+Символ 1&Символ 2&Выполненный блок\\ \hline
+A&D&Выполнен блок External\_ADC\_Read\_Double\\ \hline
+E&0x01&Выполнен блок Ext\_Interrupt, вхождение блока P1\\ \hline
+E&0x02&Выполнен блок Ext\_Interrupt, вхождение блока P2\\ \hline
+E&0x04&Выполнен блок Ext\_Interrupt, вхождение блока N1\\ \hline
+E&0x08&Выполнен блок Ext\_Interrupt, вхождение блока N2\\ \hline
+E&0x10&Выполнен блок Ext\_Interrupt, вхождение блока T2\\ \hline
+D&0&Выполнен блок Detectors\_Handling, Detectors\_Flugs пустое\\ \hline
+D&1&Выполнен блок Detectors\_Handling, до вызова External\_ADC\_Read\_Double\\ \hline
+D&2&Выполнен блок Detectors\_Handling, после вызова External\_ADC\_Read\_Double и до конца функции\\ \hline
+N&0&Выполнен блок New\_Secunde\_Handler (вызов Data\_CAN\_Sending и Command\_Handler каждую секунду)\\ \hline
+N&1&Выполнен блок New\_Secunde\_Handler (сохранение текущей дозы каждую секунду)\\ \hline
+N&2&Выполнен блок New\_Secunde\_Handler (отправка накопленных за минуту данных и каждые пять минут спектра)\\ \hline
+\end{tabularx}  
+\end{center}
+\normalsize
 
 
-\textbf{Символ 1Символ 2Выполненный блок}ADВыполнен блок External\_ADC\_Read\_DoubleE0x01Выполнен блок Ext\_Interrupt, вхождение блока P1E0x02Выполнен блок Ext\_Interrupt, вхождение блока P2E0x04Выполнен блок Ext\_Interrupt, вхождение блока N1E0x08Выполнен блок Ext\_Interrupt, вхождение блока N2E0x10Выполнен блок Ext\_Interrupt, вхождение блока T2D0Выполнен блок Detectors\_Handling, Detectors\_Flugs пустоеD1Выполнен блок Detectors\_Handling, до вызова External\_ADC\_Read\_DoubleD2Выполнен блок Detectors\_Handling, после вызова External\_ADC\_Read\_Double и до конца функцииN0Выполнен блок New\_Secunde\_Handler (вызов Data\_CAN\_Sending и Command\_Handler каждую секунду)N1Выполнен блок New\_Secunde\_Handler (сохранение текущей дозы каждую секунду)N2Выполнен блок New\_Secunde\_Handler (отправка накопленных за минуту данных и каждые пять минут спектра)
+
+
+
 
 \chapter{Общий вид модели прибора СПЭ в среде Simulink/Matlab.} \label{AppendixB}
 \begin{figure}
