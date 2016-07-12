@@ -163,6 +163,14 @@ MS received 12 October 1971, in revised form 18 November
 			\int_{-X_2}^{X_2} \int_{-Y_2}^{Y_2}
 			\frac{dx_1dy_1dx_2dy_2}{\left\lbrace Z^2 + (x_2-x_1)^2 + (y_2-y_1)^2\right\rbrace^2 }\]
 
+Численный расчет в пакете Mathcad ( рисунок \ref{fig:mathcadGeomfactor}) дает в результате для нашего случая геометрический фактор 0.145. Поправочный коэффициент для энерговыделения в телескопе детекторов 0,043.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\linewidth]{images/mathcadGeomfactor}
+\caption{ Расчет геометрического фактора телескопа в системе Mathcad}
+\label{fig:mathcadGeomfactor}
+\end{figure}
 
 %\begin{figure}
 %\centering
@@ -171,19 +179,19 @@ MS received 12 October 1971, in revised form 18 November
 %\label{fig:totalgeomfactorintegral}
 %\end{figure}
 
-\begin{figure}
-\centering
-\includegraphics[width=0.7\linewidth]{images/totalgeomfactorsolved}
-\caption{}
-\label{fig:totalgeomfactorsolved}
-\end{figure}
-\begin{figure}
-\centering
-\includegraphics[width=0.7\linewidth]{images/totalgeomfactorsolved2}
-\caption[для интенсивности]{}
-\caption{}
-\label{fig:totalgeomfactorsolved2}
-\end{figure}
+%\begin{figure}
+%\centering
+%\includegraphics[width=0.7\linewidth]{images/totalgeomfactorsolved}
+%\caption{}
+%\label{fig:totalgeomfactorsolved}
+%\end{figure}
+%\begin{figure}
+%\centering
+%\includegraphics[width=0.7\linewidth]{images/totalgeomfactorsolved2}
+%\caption[для интенсивности]{}
+%\caption{}
+%\label{fig:totalgeomfactorsolved2}
+%\end{figure}
 
 
 \subsubsection{Расчет энергетического коэффициента}
@@ -193,13 +201,13 @@ MS received 12 October 1971, in revised form 18 November
 
 В ходе калибровок получено, что одной еденице по дозе детектора 1 соответствует 135 счетных имульсов в детектору 1, получается что умножив 135 на 3,4141  КэВ/канал  получаем энергетический эквивалент 3687 КэВ/(дозовый импульс) 
 
-Так как мы имеем квадратный детектор с размерами 10мм * 10мм* 300мкм, оценим массу чувствительного объема детектора, подборав значения толщины тормозящего слоя вещества $ 0.0013 $ г/см$^2 $. Такая масса соответствует 5,58 мкм кремния или 1,04 см воздуха, а масса детектора соответственно: 6,87г.
+Так как мы имеем квадратный детектор с размерами 10мм * 10мм* 300мкм, оценим массу чувствительного объема детектора, подборав значения толщины тормозящего слоя вещества $ 0.0013 $ г/см$^2 $. Такая масса соответствует 5,58 мкм кремния или 1,04 см воздуха, а масса детектора соответственно: 0,0687г.
 
 Дет1: 8,69пГр/кодАЦП,  
 
 Дет2: 9,32пГр/кодАЦП,  
 
-Далее можно посчитать на воду а также учесть разные геомфакторы для всех типов данных
+\todo{Далее можно посчитать на воду а также учесть разные геометрические факторы для всех типов данных}
 \subsection{Нейтронные детекторы}
 
 Детектор нейтронов выполнен на счётчике медленных нейтронов «СИ-13Н», представляющем собой газоразрядный  счетчик, работающий в режиме коронного разряда. Для обеспечения надежности используются 2 счетчика. Второй детектор нейтронов окружен замедляющей оболочной из поликарбоната, что позволило расширить энергетический диапазон регистрируемых нейтронов. При прохождении нейтрона через газ Не-3, наполняющий счетчик, происходит ядерная реакция:
