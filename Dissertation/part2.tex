@@ -163,7 +163,7 @@ MS received 12 October 1971, in revised form 18 November
 			\int_{-X_2}^{X_2} \int_{-Y_2}^{Y_2}
 			\frac{dx_1dy_1dx_2dy_2}{\left\lbrace Z^2 + (x_2-x_1)^2 + (y_2-y_1)^2\right\rbrace^2 }\]
 
-Численный расчет в пакете Mathcad ( рисунок \ref{fig:mathcadGeomfactor}) дает в результате для нашего случая геометрический фактор 0.145, учитывая что геометрический фактор отдельного детектора равен $ 4\pi $ и мы имеем два идентичных детектора, так что удваиваем полученный результат. Поправочный коэффициент для энерговыделения в телескопе детекторов 0,043, он рассчитан по соотношению \ref{eq:lpe_koef}, где $ S_0 $ площадь чувствительной поверхности.
+Численный расчет в пакете Mathcad ( рисунок \ref{fig:mathcadGeomfactor}) дает в результате для нашего случая геометрический фактор 0.145,  так как геометрический фактор отдельного детектора равен $ 4\pi $ и мы имеем два идентичных детектора, поэтому удваиваем результат интегрирования. Поправочный коэффициент для энерговыделения в телескопе детекторов 0,043, он рассчитан по соотношению \ref{eq:lpe_koef}, где $ S_0 $ площадь чувствительной поверхности.
 \begin{equation}\label{eq:lpe_koef}
  \xi = \frac{Z}{2 \pi S_0 } \cdot \int_{-X_1}^{X_1} \int_{-Y_1}^{Y_1} 
 \int_{-X_2}^{X_2} \int_{-Y_2}^{Y_2}
@@ -171,9 +171,11 @@ MS received 12 October 1971, in revised form 18 November
 \end{equation}
 
 
+
+
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.7\linewidth]{images/mathcadGeomfactor}
+\includegraphics[width=0.7\linewidth]{images/mathcadGeomfactor1}
 \caption{ Расчет геометрического фактора телескопа в системе Mathcad}
 \label{fig:mathcadGeomfactor}
 \end{figure}
