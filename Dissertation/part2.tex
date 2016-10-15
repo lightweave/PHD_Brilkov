@@ -202,24 +202,6 @@ MS received 12 October 1971, in revised form 18 November
 %\end{figure}
 
 
-\subsubsection{Расчет энергетического коэффициента}
-Детектор1: 3,4141 КэВ/канал 
-
-Детектор2: 4 КэВ/канал - очень большой разброс по калибровкам - не могу понять почему:15.4 – 16.3 КэВ/канал. Необходимо найти исходные данные калибровок.
-
-В ходе калибровок получено, что одной еденице по дозе детектора 1 соответствует 135 счетных имульсов в детектору 1, получается что умножив 135 на 3,4141  КэВ/канал  получаем энергетический эквивалент 3687 КэВ/(дозовый импульс) 
-
-Так как мы имеем квадратный детектор с размерами 10мм * 10мм* 300мкм, оценим массу чувствительного объема детектора, подборав значения толщины тормозящего слоя вещества $ 0.0013 $ г/см$^2 $. Такая масса соответствует 5,58 мкм кремния или 1,04 см воздуха, а масса детектора соответственно: 0,0687г.
-
-Дет1: 8,69пГр/кодАЦП 
-
-Дет2: 9,32пГр/кодАЦП  
-
-\todo{Далее можно посчитать на воду}
-
-В программе микроконтроллера Дэпрон с целью сокращения передачи неинформативных каналов АЦП был сделан сдвиг на 3 разряда при записи в спектр энерговыделения, такая операция близка к операции деления на 8.
-
-Независимый расчет дал результат для коэффициентов для первого детектора 0,0633  наноГрей/импульс, для второго -  0,0742 наноГрей/импульс. С учетом коэффициента 8 это близко к полученным результатам.
 
 \subsection{Нейтронные детекторы}
 
@@ -227,6 +209,10 @@ MS received 12 October 1971, in revised form 18 November
 \[ n+^3\!He = p+T+764 \textrm{ КэВ}\]
 
 Продукты реакции вызывают ионизацию газа в счётчике, что приводит к образованию газового разряда и появлению электрического импульса на электроде счетчика. Импульс поступает на вход усилителя-формирователя и, затем, поступает на регистр прерываний процессора, где используется для подсчета числа зарегистрированных нейтронов.
+
+[Radiat Meas. 2002 Oct;35(5):531-8.
+Measurements of neutron fluxes with energies from thermal to several MeV in near-Earth space: SINP results.
+Shavrin PI1, Kuzhevskij BM, Kuznetsov SN, Nechaev OY, Panasyuk MI, Ryumin SP, Yushkov BY, Bratolyubova-Tsulukidze LS, Lyagushin VI, Germantsev YL.]
 
 %\newpage
 %============================================================================================================================
@@ -322,10 +308,138 @@ MS received 12 October 1971, in revised form 18 November
 \end{figure}
 
 
-
 \todo{Таблица Распределение битов в регистре прерывания}
 
+
+\subsubsection{Процедура обработки данных с детекторов}
+{\small 
+\begin{verbatim}
+void Detectors_Handling(void)
+{  
+	//int i; char* p1; // char* p2;
+	int J, K;
+	if (!Detectors_Flugs) {
+		long interrupt_register = AT91C_BASE_PIOB->PIO_ISR;    
+		return;
+	}  
+	Temporal_buff.FLUGS = Detectors_Flugs;
+	// Prot_Comp_1++;    //__________________________ !!! FOR debuging !!! ________________
+	if (Detectors_Flugs & Detec_Flug_ADC){
+		dataADC = External_ADC_Read_Double();
+		Temporal_buff.ADC_code = dataADC;
+	} else dataADC = 0;
+	
+	
+	if (Detectors_Flugs & Detec_Flug_compar){
+		Prot_Comp_1++;  Prot_Comp_2++;  
+		J= (((dataADC+3)>>3) & 0X00000FFF);
+		Dose_Comp_1+=J;
+		K= Digital_Compression(J);
+		if (K<2) K=2; if(K>63) K=63;
+		Spectra[2][K]++;
+		
+		//  ADC_code_2=dataADC+0x00030000;
+		
+		J= (((dataADC+0x00030000)>>19) & 0X00000FFF);   //(short )
+		Dose_Comp_2+=J;
+		K= Digital_Compression(J);
+		if (K<2) K=2; if(K>63) K=63;
+		Spectra[3][K]++;
+		
+	} else {
+	if ((Detectors_Flugs & Detec_Flug_P1)&&( dataADC & 0X00003FF0)){
+		J= (((dataADC+3)>>3) & 0X00000FFF);
+		Dose_1+=J;  Prot_1++;
+		K= Digital_Compression(J);
+		if (K<2) K=2; if(K>63) K=63;
+		Spectra[0][K]++;
+	}
+	if ((Detectors_Flugs & Detec_Flug_P2)&&( dataADC & 0X3FF00000)){
+		J= (((dataADC+0x00030000)>>19) & 0X00000FFF);
+		Dose_2+=J;  Prot_2++;
+		
+		K= Digital_Compression(J);
+		if (K<2) K=2; if(K>63) K=63;
+		Spectra[1][K]++;
+		
+	}
+}
+if (Detectors_Flugs & Detec_Flug_N1){      
+	Neutron_1 += Neut_1;
+	Neut_1 = 0;
+} 
+
+if (Detectors_Flugs & Detec_Flug_N2){       
+	Neutron_2 += Neut_2; 
+	Neut_2 = 0;
+} 
+
+if(Temporal_buff.interr_reg & Detector_Interrupt_t1) {
+	if(High_Ampl_Buffer.ind==0){
+		High_Ampl_Buffer.day[0]= t_info.day;
+		High_Ampl_Buffer.day[1]= t_info.Mounth;
+	}    
+	High_Ampl_Buffer.HA[High_Ampl_Buffer.ind].ADC_code = dataADC;
+	High_Ampl_Buffer.HA[High_Ampl_Buffer.ind].ta[0] = tick_1;
+	High_Ampl_Buffer.HA[High_Ampl_Buffer.ind].ta[1] = t_info.secunde;
+	High_Ampl_Buffer.HA[High_Ampl_Buffer.ind].ta[2] = t_info.minute;
+	High_Ampl_Buffer.HA[High_Ampl_Buffer.ind].ta[3] = t_info.hour;
+	High_Ampl_Buffer.ind++;
+	if(High_Ampl_Buffer.ind>62) Send_High_Ampl_Buffer();    
+}     
+//For Neutron burst 
+unsigned long N_T;
+unsigned short millisec_time = AT91C_BASE_TC2->TC_CV;
+millisec_time = millisec_time >>3;   //40 kHz / 8 = 5 kHz
+if ((Pronon_Fon < Proton_Level) && (N_ind > 0) && (Detectors_Flugs & Detec_Flug_Neutron)){      
+	if (((millisec_time - Old_Tick_2)< D_tick_2) && (Old_Sec== t_info.day_second)){
+		N_T= t_info.day_second <<15;
+		N_T |= Old_Tick_2 & 0x00001fff;
+		if (Detectors_Flugs & Detec_Flug_N1) N_T |= 0x00002000;
+		if (Detectors_Flugs & Detec_Flug_N2) N_T |= 0x00004000;
+		Neutron_Bunch.neutron_t[i_n_t++]=N_T;
+		if(i_n_t>126) Send_Neutron_Bunch();
+	}
+}
+Old_Sec = t_info.day_second;
+Old_Tick_2 = millisec_time;        
+
+
+Detectors_Flugs=0;
+
+}  
+\end{verbatim}
+}
+
 \todo{Блок схема работы процедуры Detectors\_Handling}
+
+{\small 
+\begin{verbatim}
+// Test conversion program
+	
+#include <iostream>
+#include <string>
+
+int main()
+{
+	std::string name;
+	//getline (std::cin, name);
+	unsigned short dataADC, J, K, L;
+	dataADC = 114;
+	
+	std::cout << "Was " << dataADC << "!\n";
+	
+	J= (((dataADC+3)>>3) & 0X00000FFF);
+	
+	std::cout << "Present " << J << "!\n";
+	K= (J<<3);
+	std::cout << "Left shift " << K << "!\n";
+	L= (J*8);
+	std::cout << "Multyply*8 " << L << "!\n";
+}
+\end{verbatim}
+}
+
 
 
 \subsection{Контрольная проверочная аппаратура}
@@ -388,4 +502,24 @@ D = \frac{E}{m} = \dfrac{w_i \cdot\frac{q}{e}}{m} = \frac{w_i \cdot \Delta U \cd
 	\item[$ \eta $] суммарный градуировочный коэффициент тракта усиления до АЦП
 	\item[$ \Delta U $] шаг дискретизации АЦП
 \end{description} 
-Большая часть величин в этой формуле известна, а экспериментально были определены недостающие величины. Данная работа была проведена Сиолаповым Виктором вместе с Бенгиным В.В, 
+Большая часть величин в этой формуле известна, а экспериментально были определены недостающие величины. Данная работа была проведена Сиолаповым Виктором под руководством Бенгина В.В., опираясь на полученные результаты можно провести расчет энергетических коэффициентов для получения величин дозы.
+
+Детектор1: 3,4141 КэВ/канал 
+
+Детектор2: 4 КэВ/канал - очень большой разброс по калибровкам - не могу понять почему:15.4 – 16.3 КэВ/канал. Необходимо найти исходные данные калибровок.
+
+В ходе калибровок получено, что одной еденице по дозе детектора 1 соответствует 135 счетных имульсов в детектору 1, получается что умножив 135 на 3,4141  КэВ/канал  получаем энергетический эквивалент 3687 КэВ/(дозовый импульс) 
+
+Так как мы имеем квадратный детектор с размерами 10мм * 10мм* 300мкм, оценим массу чувствительного объема детектора, подборав значения толщины тормозящего слоя вещества $ 0.0013 $ г/см$^2 $. Такая масса соответствует 5,58 мкм кремния или 1,04 см воздуха, а масса детектора соответственно: 0,0687г.
+
+Дет1: 8,69пГр/кодАЦП  0,06952 = наноГрей/импульс(умноженное на 8)
+
+Дет2: 9,32пГр/кодАЦП  0,07456 = наноГрей/импульс(умноженное на 8)
+
+
+
+\todo{Далее можно посчитать на воду}
+
+В программе микроконтроллера Дэпрон с целью сокращения передачи неинформативных каналов АЦП был сделан сдвиг на 3 разряда при записи в спектр энерговыделения, такая операция близка к операции деления на 8.
+
+Независимый расчет дал результат для коэффициентов для первого детектора 0,0633  наноГрей/импульс, для второго -  0,0742 наноГрей/импульс. С учетом коэффициента 8 это близко к полученным результатам.
