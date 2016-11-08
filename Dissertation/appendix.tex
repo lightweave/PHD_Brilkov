@@ -17,26 +17,35 @@
 
 \chapter{Структура данных измерений ДЭПРОН} \label{AppendixA}
 
+
+
+
 \section{Блок данных ДЭПРОН A}
 \small
 \begin{center}	
-\begin{tabularx}{\textwidth}{|c|c|c|c| *5{>{\centering\arraybackslash}X|}} \hline
-	\multicolumn{8}{|c|}{Данные} \\ 
-	\multicolumn{8}{|c|}{(RECORD)} \\ \hline
-	\multicolumn{4}{|c|}{Время } &Аппаратный счетчик  детектора1 & Счет детектора 1&Счет детектора 2&Счет детектора 2\\ \cline{1-4}
-	месяц&день&час&мин&& &  & \\ \hline
-	1 байт&1 байт&1 байт&1 байт&2 байта&2 байта&2 байта&2 байта \\ \hline
+\begin{tabularx}{\textwidth}{|c|c|c|c| *5{>{\centering\arraybackslash}X|}}
+	\hline
+	\multicolumn{8}{|c|}{Данные}                                                                                                &  \\
+	\multicolumn{8}{|c|}{(RECORD)}                                                                                              &  \\ \hline
+	\multicolumn{4}{|c|}{Время }      & Аппаратный счетчик  детектора1 & Счет детектора 1 & Счет детектора 2 & Счет детектора 2 &  \\ \cline{1-4}
+	месяц  &  день  &  час   &  мин   &                                &                  &                  &  \\ \hline
+	1 байт & 1 байт & 1 байт & 1 байт & 2 байта                        & 2 байта          & 2 байта          & 2 байта          &  \\ \hline
 \end{tabularx} 
 \end{center}
 \normalsize
 Продолжение:
 \small
 \begin{center}	
-	\begin{tabularx}{\textwidth}{|*6{>{\centering\arraybackslash}X|}} \hline
-		\multicolumn{6}{|c|}{Данные} \\ 
-		\multicolumn{6}{|c|}{(RECORD)} \\ \hline
-		Нейтронный счетчик 1&Нейтронный счетчик 	2&Доза по первому детектору&Доза по второму детектору&Доза совпадений&Массивы секундной динамики 2 \\ \hline
-		2 байта&2 байта&4 байта&4 байта&4 байта&480 байт\\ \hline	\end{tabularx} 
+	\begin{tabularx}{\textwidth}{|*6{>{\centering\arraybackslash}X|}}
+		\hline
+		\multicolumn{6}{|c|}{Данные}                                                                                                                          \\
+		\multicolumn{6}{|c|}{(RECORD)}                                                                                                                        
+		\\ \hline
+		Нейтронный счетчик 1 & Нейтронный счетчик 	2 & Доза по первому детектору & Доза по второму детектору & Доза совпадений & Массивы секундной динамики 2 
+		\\ \hline
+		2 байта              & 2 байта               & 4 байта                   & 4 байта                   & 4 байта         & 480 байт                     
+		\\ \hline
+	\end{tabularx} 
 \end{center}
 \normalsize
 
@@ -57,10 +66,11 @@
 Продолжение:
 \small
 \begin{center}	
-	\begin{tabularx}{\textwidth}{| *4{>{\centering\arraybackslash}X|}} \hline
-		\multicolumn{4}{|c|}{Массив секундной динамики}\\ \hline
-		Нейтронный счетчик 1&	Нейтронный счетчик 2	&Доза по первому детектору&	Доза по второму детектору\\ \hline
-		1 байт&1 байт&1 байт&1 байт \\ \hline
+	\begin{tabularx}{\textwidth}{| *4{>{\centering\arraybackslash}X|}}
+		\hline
+		\multicolumn{4}{|c|}{Массив секундной динамики}                                                     \\ \hline
+		Нейтронный счетчик 1 & Нейтронный счетчик 2 & Доза по первому детектору & Доза по второму детектору \\ \hline
+		1 байт               & 1 байт               & 1 байт                    & 1 байт                    \\ \hline
 	\end{tabularx} 
 \end{center}
 \normalsize
@@ -76,13 +86,18 @@
 
 \footnotesize
 \begin{center}	
-	\begin{tabularx}{\textwidth}{|X|c|c|c| *6{>{\centering\arraybackslash}X|}} \hline
-		\multicolumn{10}{|c|}{Данные} \\ 
-		\multicolumn{10}{|c|}{(RECORD)} \\ \hline
-		Спектр детектора 1&\multicolumn{4}{|c|}{Время } &Спектр детектора 2&Счетчик детектора 1&Спектр совпадений 1&Счетчик детектора 2&Спектр совпадений2\\ \cline{2-5}
-		&месяц&день&час&мин&&&&&\\ \hline
-		
-		124 байта&1 байт&1 байт&1 байт&124 байта&4 байта&124 байта&4 байта&124 байта&4 байта \\ \hline
+	\begin{tabularx}{\textwidth}{|X|c|c|c| *6{>{\centering\arraybackslash}X|}}
+		\hline
+		\multicolumn{10}{|c|}{Данные}                                                                                                                           
+		              \\
+		\multicolumn{10}{|c|}{(RECORD)}                                                                                                                         
+		              \\ \hline
+		Спектр детектора 1 & \multicolumn{4}{|c|}{Время }         & Спектр детектора 2 & Счетчик детектора 1 & Спектр совпадений 1 & Счетчик детектора 2 & 
+		Спектр совпадений2 \\ \cline{2-5}
+		                   & месяц  &  день  &  час   & мин       &                    &                     &                     &                     &  \\ 
+		                   \hline
+		124 байта          & 1 байт & 1 байт & 1 байт & 124 байта & 4 байта            & 124 байта           & 4 байта             & 124 байта           & 4 
+		байта            \\ \hline
 	\end{tabularx} 
 \end{center}
 \normalsize
@@ -93,24 +108,25 @@
 
 \small
 \begin{center}
-\begin{tabular}{|*4{|cc|}} \hline
-Канал № & Код АЦП & Канал № & Код АЦП & Канал № & Код АЦП & Канал № & Код АЦП\\ \hline
-2       & 16      &   18    & 160     &   34    &   640   &   50    & 2560 \\ \hline
-3       & 24      &   19    & 176     &   35    &   704   &   51    & 2816 \\ \hline
-4       & 32      &   20    & 192     &   36    &   768   &   52    & 3072 \\ \hline
-5       & 40      &   21    & 208     &   37    &   832   &   53    & 3328 \\ \hline
-6       & 48      &   22    & 224     &   38    &   896   &   54    & 3584 \\ \hline
-7       & 56      &   23    & 240     &   39    &   960   &   55    & 3840 \\ \hline
-8       & 64      &   24    & 256     &   40    &  1024   &   56    & 4096 \\ \hline
-9       & 72      &   25    & 288     &   41    &  1152   &   57    & 4608 \\ \hline
-10      & 80      &   26    & 320     &   42    &  1280   &   58    & 5120 \\ \hline
-11      & 88      &   27    & 352     &   43    &  1408   &   59    & 5632 \\ \hline
-12      & 96      &   28    & 384     &   44    &  1536   &   60    & 6144 \\ \hline
-13      & 104     &   29    & 416     &   45    &  1664   &   61    & 6656 \\ \hline
-14      & 112     &   30    & 448     &   46    &  1792   &   62    & 7168 \\ \hline
-15      & 120     &   31    & 480     &   47    &  1920   &   63    & 7680 \\ \hline
-16      & 128     &   32    & 512     &   48    &  2048   &         &  \\ \hline
-17      & 144     &   33    & 576     &   49    &  2304   &         &  \\ \hline
+\begin{tabular}{|*4{|cc|}}
+	\hline
+	Канал № & Код АЦП & Канал № & Код АЦП & Канал № & Код АЦП & Канал № & Код АЦП \\ \hline
+	   2    &   16    &   18    &   160   &   34    &   640   &   50    &  2560   \\ \hline
+	   3    &   24    &   19    &   176   &   35    &   704   &   51    &  2816   \\ \hline
+	   4    &   32    &   20    &   192   &   36    &   768   &   52    &  3072   \\ \hline
+	   5    &   40    &   21    &   208   &   37    &   832   &   53    &  3328   \\ \hline
+	   6    &   48    &   22    &   224   &   38    &   896   &   54    &  3584   \\ \hline
+	   7    &   56    &   23    &   240   &   39    &   960   &   55    &  3840   \\ \hline
+	   8    &   64    &   24    &   256   &   40    &  1024   &   56    &  4096   \\ \hline
+	   9    &   72    &   25    &   288   &   41    &  1152   &   57    &  4608   \\ \hline
+	  10    &   80    &   26    &   320   &   42    &  1280   &   58    &  5120   \\ \hline
+	  11    &   88    &   27    &   352   &   43    &  1408   &   59    &  5632   \\ \hline
+	  12    &   96    &   28    &   384   &   44    &  1536   &   60    &  6144   \\ \hline
+	  13    &   104   &   29    &   416   &   45    &  1664   &   61    &  6656   \\ \hline
+	  14    &   112   &   30    &   448   &   46    &  1792   &   62    &  7168   \\ \hline
+	  15    &   120   &   31    &   480   &   47    &  1920   &   63    &  7680   \\ \hline
+	  16    &   128   &   32    &   512   &   48    &  2048   &         &  \\ \hline
+	  17    &   144   &   33    &   576   &   49    &  2304   &         &  \\ \hline
 \end{tabular}  
 \end{center}
 \normalsize
@@ -122,11 +138,12 @@
 
 \small
 \begin{center}
-	\begin{tabularx}{\textwidth}{|c|c|X|X|} \hline
-		\multicolumn{4}{|c|}{Данные (RECORD)}\\ \hline
-		\multicolumn{2}{|c|}{Время} &Индекс массива высоких амплитуд(по умолчанию значение 63)&Массивы данных по высоким амплитудам\\ \cline{1-2}
-		месяц&день&&\\ \hline
-		1 байт&1 байт&2 байта&63 массива  по 8 байт \\ \hline		
+	\begin{tabularx}{\textwidth}{|c|c|X|X|}
+		\hline
+		\multicolumn{4}{|c|}{Данные (RECORD)}                                                                                          \\ \hline
+		\multicolumn{2}{|c|}{Время} & Индекс массива высоких амплитуд(по умолчанию значение 63) & Массивы данных по высоким амплитудам \\ \cline{1-2}
+		месяц  &        день        &                                                           &  \\ \hline
+		1 байт &       1 байт       & 2 байта                                                   & 63 массива  по 8 байт                \\ \hline
 	\end{tabularx}  
 \end{center}
 \normalsize
@@ -138,11 +155,12 @@
 
 \small
 \begin{center}
-	\begin{tabularx}{\textwidth}{|c|c|X|X|X|X|} \hline
-		\multicolumn{6}{|c|}{Массив данных по высоким амплитудам}\\ \hline
-		 Код АЦП 1&Код АЦП 2&\multicolumn{4}{c|}{Время события}\\ \cline{3-6}
-		 &&Код таймера&секунда&минута&час\\ \hline
-		 2 байта&2 байта&1 байт&1 байт&1 байт&1 байт\\ \hline		
+	\begin{tabularx}{\textwidth}{|c|c|X|X|X|X|}
+		\hline
+		\multicolumn{6}{|c|}{Массив данных по высоким амплитудам}       \\ \hline
+		Код АЦП 1 & Код АЦП 2 &   \multicolumn{4}{c|}{Время события}    \\ \cline{3-6}
+		          &           & Код таймера & секунда & минута & час    \\ \hline
+		 2 байта  &  2 байта  & 1 байт      & 1 байт  & 1 байт & 1 байт \\ \hline
 	\end{tabularx}  
 \end{center}
 \normalsize
@@ -157,21 +175,20 @@
 
 \small
 \begin{flushleft}
-	\begin{tabular}{|*{17}{p{0.5cm}|}} \hline
-		32&31&30&29&28&27&26&25&24&23&22&21&20&19&18&17&16 \\ \hline
-		\multicolumn{17}{|c|}{Время дня в секундах}	\\ \hline
+	\begin{tabular}{|*{17}{p{0.5cm}|}}
+		\hline
+		32 & 31 & 30 & 29 & 28 & 27 & 26 & 25 & 24 & 23 & 22 & 21 & 20 & 19 & 18 & 17 & 16 \\ \hline
+		\multicolumn{17}{|c|}{Время дня в секундах}                                        \\ \hline
 	\end{tabular}  
 \end{flushleft}
 \normalsize
 
 \small
 \begin{flushleft}
-	\begin{tabular}{|*{15}{p{0.5cm}|}} \hline	
-		15&14&
-		13&12&11&10&9&8&7&6&5&4&3&2&1\\ \hline		
-		\multicolumn{2}{|c|}{НД}&
-		\multicolumn{13}{p{9cm}|}{Количество тиков таймера после предыдущего нейтронного импульса}
-		\\ \hline
+	\begin{tabular}{|*{15}{p{0.5cm}|}}
+		\hline
+		15 & 14                  & 13 & 12 & 11 & 10 & 9 & 8 & 7 & 6 & 5 & 4 & 3 & 2 & 1                                      \\ \hline
+		\multicolumn{2}{|c|}{НД} & \multicolumn{13}{p{9cm}|}{Количество тиков таймера после предыдущего нейтронного импульса} \\ \hline
 	\end{tabular}  
 \end{flushleft}
 \normalsize
@@ -223,14 +240,15 @@
 
 \small
 \begin{center}
-	\begin{tabularx}{\textwidth}{|c|c|X|} \hline
-	№ & Команда & Описание команды\\ \hline
-	1 & Clr & сброс настроек к заводским параметрам\\ \hline
-	2 & Tn+ & увеличение интервала между моментами регистрации нейтронов\\ \hline
-	3 & Tn- & уменьшение интервала между моментами регистрации нейтронов\\ \hline
-	4 & Psnr+ & увеличение допустимого протонного фона\\ \hline
-	5 & Psnr\_ & уменьшение допустимого протонного фона\\ \hline
-	6 & Alpha+ & увеличение интервала времени сглаживания\\ \hline
+	\begin{tabularx}{\textwidth}{|c|c|X|}
+		\hline
+		№ & Команда & Описание команды                                           \\ \hline
+		1 &   Clr   & сброс настроек к заводским параметрам                      \\ \hline
+		2 &   Tn+   & увеличение интервала между моментами регистрации нейтронов \\ \hline
+		3 &   Tn-   & уменьшение интервала между моментами регистрации нейтронов \\ \hline
+		4 &  Psnr+  & увеличение допустимого протонного фона                     \\ \hline
+		5 & Psnr\_  & уменьшение допустимого протонного фона                     \\ \hline
+		6 & Alpha+  & увеличение интервала времени сглаживания                   \\ \hline
 	\end{tabularx}  
 \end{center}
 \normalsize
@@ -240,12 +258,17 @@
 Ответный массив информации от прибора ДЭПРОН.
 \footnotesize
 \begin{center}
-	\begin{tabularx}{\textwidth}{|*5{c|}|*6{X|}} \hline
-	\multicolumn{11}{|c|}{Данные (RECORD)}\\ \hline
-	\multicolumn{5}{|c|}{Время} &Номер команды породившей ответ&D tick&Счетчик принятых команд&Текущий фон потока протонов&Psnr&Alfa\\ \cline{1-5}
-	мес&день&час&мин&сек&&&&&&\\ \hline
-	1 байт&1 байт&1 байт&1 байт&1 байт&4 байта&4 байта&4 байта&4 байта&4 байта&4 байта\\ \hline
-\end{tabularx}  
+	\begin{tabularx}{\textwidth}{|*5{c|}|*6{X|}}
+		\hline
+		\multicolumn{11}{|c|}{Данные 
+		(RECORD)}                                                                                                                            \\ \hline
+		\multicolumn{5}{|c|}{Время}                & Номер команды породившей ответ & D tick  & Счетчик принятых команд & Текущий фон потока протонов & Psnr    
+		& Alfa    \\ \cline{1-5}
+		 мес   &  день  &  час   &  мин   &  сек   &                                &         &                         &                             &         
+		 &  \\ \hline
+		1 байт & 1 байт & 1 байт & 1 байт & 1 байт & 4 байта                        & 4 байта & 4 байта                 & 4 байта                     & 4 байта 
+		& 4 байта \\ \hline
+	\end{tabularx}  
 \end{center}
 \normalsize
 
@@ -275,32 +298,34 @@
 
 \footnotesize
 \begin{center}
-	\begin{tabularx}{\textwidth}{|*5{c|}*6{X|}} \hline
-		\multicolumn{11}{|c|}{Данные (RECORD)}\\ \hline
-		\multicolumn{3}{|c|}{Пакет таймера 1} &Пакет таймера 2&Пакет таймера 3&&&&&&\\ \cline{1-3}
-		Символ 1&Символ 2&Значение таймера&&&&&&&&\\ \hline
-		1 байт&1 байт&2 байта&4 байат&4 байта&&&&&&\\ \hline
+	\begin{tabularx}{\textwidth}{|*5{c|}*6{X|}}
+		\hline
+		\multicolumn{11}{|c|}{Данные (RECORD)}                                                       \\ \hline
+		\multicolumn{3}{|c|}{Пакет таймера 1}  & Пакет таймера 2 & Пакет таймера 3 &  &  &  &  &  &  \\ \cline{1-3}
+		Символ 1 & Символ 2 & Значение таймера &                 &                 &  &  &  &  &  &  \\ \hline
+		 1 байт  &  1 байт  &     2 байта      &     4 байат     &     4 байта     &  &  &  &  &  &  \\ \hline
 	\end{tabularx}  
 \end{center}
 \normalsize
 Таблица определения выполненных блоков по маркирующим символам пакета таймера.
 \small
 \begin{center}
-	\begin{tabularx}{\textwidth}{|c|c|X|} \hline
-Символ 1&Символ 2&Выполненный блок\\ \hline
-A&D&Выполнен блок External\_ADC\_Read\_Double\\ \hline
-E&0x01&Выполнен блок Ext\_Interrupt, вхождение блока P1\\ \hline
-E&0x02&Выполнен блок Ext\_Interrupt, вхождение блока P2\\ \hline
-E&0x04&Выполнен блок Ext\_Interrupt, вхождение блока N1\\ \hline
-E&0x08&Выполнен блок Ext\_Interrupt, вхождение блока N2\\ \hline
-E&0x10&Выполнен блок Ext\_Interrupt, вхождение блока T2\\ \hline
-D&0&Выполнен блок Detectors\_Handling, Detectors\_Flugs пустое\\ \hline
-D&1&Выполнен блок Detectors\_Handling, до вызова External\_ADC\_Read\_Double\\ \hline
-D&2&Выполнен блок Detectors\_Handling, после вызова External\_ADC\_Read\_Double и до конца функции\\ \hline
-N&0&Выполнен блок New\_Secunde\_Handler (вызов Data\_CAN\_Sending и Command\_Handler каждую секунду)\\ \hline
-N&1&Выполнен блок New\_Secunde\_Handler (сохранение текущей дозы каждую секунду)\\ \hline
-N&2&Выполнен блок New\_Secunde\_Handler (отправка накопленных за минуту данных и каждые пять минут спектра)\\ \hline
-\end{tabularx}  
+	\begin{tabularx}{\textwidth}{|c|c|X|}
+		\hline
+		Символ 1 & Символ 2 & Выполненный блок                                                                                        \\ \hline
+		   A     &    D     & Выполнен блок External\_ADC\_Read\_Double                                                               \\ \hline
+		   E     &   0x01   & Выполнен блок Ext\_Interrupt, вхождение блока P1                                                        \\ \hline
+		   E     &   0x02   & Выполнен блок Ext\_Interrupt, вхождение блока P2                                                        \\ \hline
+		   E     &   0x04   & Выполнен блок Ext\_Interrupt, вхождение блока N1                                                        \\ \hline
+		   E     &   0x08   & Выполнен блок Ext\_Interrupt, вхождение блока N2                                                        \\ \hline
+		   E     &   0x10   & Выполнен блок Ext\_Interrupt, вхождение блока T2                                                        \\ \hline
+		   D     &    0     & Выполнен блок Detectors\_Handling, Detectors\_Flugs пустое                                              \\ \hline
+		   D     &    1     & Выполнен блок Detectors\_Handling, до вызова External\_ADC\_Read\_Double                                \\ \hline
+		   D     &    2     & Выполнен блок Detectors\_Handling, после вызова External\_ADC\_Read\_Double и до конца функции          \\ \hline
+		   N     &    0     & Выполнен блок New\_Secunde\_Handler (вызов Data\_CAN\_Sending и Command\_Handler каждую секунду)        \\ \hline
+		   N     &    1     & Выполнен блок New\_Secunde\_Handler (сохранение текущей дозы каждую секунду)                            \\ \hline
+		   N     &    2     & Выполнен блок New\_Secunde\_Handler (отправка накопленных за минуту данных и каждые пять минут спектра) \\ \hline
+	\end{tabularx}  
 \end{center}
 \normalsize
 
@@ -308,16 +333,17 @@ N&2&Выполнен блок New\_Secunde\_Handler (отправка накоп
 
 
 
-
-\chapter{Общий вид модели прибора СПЭ в среде Simulink/Matlab.} \label{AppendixB}
-\begin{figure}
-	\centering
-	\includegraphics[width=0.7\linewidth]{images/simulink}
-	\caption{Общий вид модели прибора СПЭ в среде Simulink/Matlab. Логика определения типа и энергии частиц сгруппирована в подсистемы: е1-е6 структурные схемы выделения элекронов,  p1-p8 структурные схемы выделения протонов. D1…4E – промоделированные массивы энерговыделений в детекторах от электронов, D1…4P -  промоделированные массивы энерговыделений в детекторах от протонов. Блоки scope1-scope4 – виртуальные осциллографы в среде MATLAB, обеспечивающие наглядное отображение реакции исследуемого устройства на задаваемые внешние сигналы. Зеленым цветом показаны подсистемы имитации аналоговых сигналов, голубым цветом – подсистемы предназначенные для трансляции в аппаратный код ПЛИС, желтым цветом – выводы ПЛИС.}
-	\label{fig:simulink}
-\end{figure}
+%
+%\chapter{Общий вид модели прибора СПЭ в среде Simulink/Matlab.} \label{AppendixB}
+%\begin{figure}
+%	\centering
+%	\includegraphics[width=0.7\linewidth]{images/simulink}
+%	\caption{Общий вид модели прибора СПЭ в среде Simulink/Matlab. Логика определения типа и энергии частиц сгруппирована в подсистемы: е1-е6 структурные схемы выделения элекронов,  p1-p8 структурные схемы выделения протонов. D1…4E – промоделированные массивы энерговыделений в детекторах от электронов, D1…4P -  промоделированные массивы энерговыделений в детекторах от протонов. Блоки scope1-scope4 – виртуальные осциллографы в среде MATLAB, обеспечивающие наглядное отображение реакции исследуемого устройства на задаваемые внешние сигналы. Зеленым цветом показаны подсистемы имитации аналоговых сигналов, голубым цветом – подсистемы предназначенные для трансляции в аппаратный код ПЛИС, желтым цветом – выводы ПЛИС.}
+%	\label{fig:simulink}
+%\end{figure}
 
 \chapter{Примеры вставки листингов программного кода} \label{AppendixC}
+
 
 Для крупных листингов есть два способа. Первый красивый, но в нём могут быть проблемы с поддержкой кириллицы (у вас может встречаться в комментариях и
 печатаемых сообщениях), он представлен на листинге~\ref{list:hwbeauty}.
@@ -344,85 +370,64 @@ N&2&Выполнен блок New\_Secunde\_Handler (отправка накоп
 	}
     \end{lstlisting}
 \end{ListingEnv}%
-%Второй не такой красивый, но без ограничений (см.~листинг~\ref{list:hwplain}).
-%\begin{ListingEnv}[H]
-%    \begin{Verb}
-%        
-%        #include <iostream>
-%        using namespace std;
-%        
-%        int main() //кириллица в комментариях
-%        {
-%            cout << "Привет, мир" << endl;
-%        }
-%    \end{Verb}
-%    \caption{Программа “Hello, world” без подсветки}
-%    \label{list:hwplain}
-%\end{ListingEnv}
-%
-%Можно использовать первый для вставки небольших фрагментов
-%внутри текста, а второй для вставки полного
-%кода в приложении, если таковое имеется.
-%
-%Если нужно вставить совсем короткий пример кода (одна или две строки), то выделение  линейками и нумерация может смотреться чересчур громоздко. В таких случаях можно использовать окружения \texttt{lstlisting} или \texttt{Verb} без \texttt{ListingEnv}. Приведём такой пример с указанием языка программирования, отличного от заданного по умолчанию:
-%\begin{lstlisting}[language=Haskell]
-%fibs = 0 : 1 : zipWith (+) fibs (tail fibs)
-%\end{lstlisting}
-%Такое решение~--- со вставкой нумерованных листингов покрупнее
-%и вставок без выделения для маленьких фрагментов~--- выбрано,
-%например, в книге Эндрю Таненбаума и Тодда Остина по архитектуре
-%%компьютера~\autocite{TanAus2013} (см.~рис.~\ref{fig:tan-aus}).
-%
-%Наконец, для оформления идентификаторов внутри строк
-%(функция \lstinline{main} и тому подобное) используется
-%\texttt{lstinline} или, самое простое, моноширинный текст
-%(\texttt{\textbackslash texttt}).
+Второй не такой красивый, но без ограничений (см.~листинг~\ref{list:hwplain}).
+\begin{ListingEnv}[H]
+    \begin{Verb}
+        
+        #include <iostream>
+        using namespace std;
+        
+        int main() //кириллица в комментариях
+        {
+            cout << "Привет, мир" << endl;
+        }
+    \end{Verb}
+    \caption{Программа “Hello, world” без подсветки}
+    \label{list:hwplain}
+\end{ListingEnv}
+
+Можно использовать первый для вставки небольших фрагментов
+внутри текста, а второй для вставки полного
+кода в приложении, если таковое имеется.
+
+Если нужно вставить совсем короткий пример кода (одна или две строки), то выделение  линейками и нумерация может смотреться чересчур громоздко. В таких случаях можно использовать окружения \texttt{lstlisting} или \texttt{Verb} без \texttt{ListingEnv}. Приведём такой пример с указанием языка программирования, отличного от заданного по умолчанию:
+\begin{lstlisting}[language=R]
+
+# date correction ---------------------------------------------------------
+
+
+data.sec<-separate(data.sec, 'YYYY-MM-DD hh:mm:ss-1s',c("date", "time"),
+sep=' ')
+data.sec<-separate(data.sec, 'date',c("year", "month", "day"),
+sep='-', convert = TRUE)
+
+
+
+# изготовление даты из года и месяца, первого дня месяца и 12:00 по умолчанию
+data.sec$dates <- ISOdate(data.sec$year, data.sec$month, 1)
+# получение правильного дня из дня который вышел за границы месяца
+data.sec$dates <- data.sec$dates + (as.integer(data.sec$day) - 1) * 60*60*24
+# установка 00:00  
+data.sec$dates <- data.sec$dates - 60*60*12 
+# установка вермени по часам прибора
+data.sec$dates <- data.sec$dates + parse_time(data.sec$time)
+
+\end{lstlisting}
+Такое решение~--- со вставкой нумерованных листингов покрупнее
+и вставок без выделения для маленьких фрагментов~--- выбрано,
+например, в книге Эндрю Таненбаума и Тодда Остина по архитектуре
+%компьютера~\autocite{TanAus2013} (см.~рис.~\ref{fig:tan-aus}).
+
+Наконец, для оформления идентификаторов внутри строк
+(функция \lstinline{main} и тому подобное) используется
+\texttt{lstinline} или, самое простое, моноширинный текст
+(\texttt{\textbackslash texttt}).
 
 
 Пример~\ref{list:internal3}, иллюстрирующий подключение переопределённого языка. Может быть полезным, если подсветка кода работает криво. Без дополнительного окружения, с подписью и ссылкой, реализованной встроенным средством.
-\todo{вставить пример получения квантилей, подбор параметров и оптимизацию}
-\begin{lstlisting}[language={Renhanced},caption={Пример листинга c подписью собственными средствами},label={list:internal3}]
-## Caching the Inverse of a Matrix
 
-## Matrix inversion is usually a costly computation and there may be some
-## benefit to caching the inverse of a matrix rather than compute it repeatedly
-## This is a pair of functions that cache the inverse of a matrix.
+\begin{lstlisting}[language={Renhanced},caption={Листинг восстановления метки даты в секундных массивах},label={list:internal3}]
 
-## makeCacheMatrix creates a special "matrix" object that can cache its inverse
-
-makeCacheMatrix <- function(x = matrix()) {#кириллица в комментариях при xelatex b lualatex имеет проблемы с пробелами
-    i <- NULL
-    set <- function(y) {
-        x <<- y
-        i <<- NULL
-    }
-    get <- function() x
-    setSolved <- function(solve) i <<- solve
-    getSolved <- function() i
-    list(set = set, get = get,
-    setSolved = setSolved,
-    getSolved = getSolved)
-    
-}
-
-
-## cacheSolve computes the inverse of the special "matrix" returned by
-## makeCacheMatrix above. If the inverse has already been calculated (and the
-## matrix has not changed), then the cachesolve should retrieve the inverse from
-## the cache.
-
-cacheSolve <- function(x, ...) {
-    ## Return a matrix that is the inverse of 'x'
-    i <- x$getSolved()
-    if(!is.null(i)) {
-        message("getting cached data")
-        return(i)
-    }
-    data <- x$get()
-    i <- solve(data, ...)
-    x$setSolved(i)
-    i  
-}
 \end{lstlisting}
 %
 %Листинг~\ref{list:external1} подгружается из внешнего файла. Приходится загружать без окружения дополнительного. Иначе по страницам не переносится.
