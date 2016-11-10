@@ -342,92 +342,283 @@
 %	\label{fig:simulink}
 %\end{figure}
 
-\chapter{Примеры вставки листингов программного кода} \label{AppendixC}
+\chapter{Листингов программного кода комплекса ДЭПРОН} \label{AppendixB}
 
 
-Для крупных листингов есть два способа. Первый красивый, но в нём могут быть проблемы с поддержкой кириллицы (у вас может встречаться в комментариях и
-печатаемых сообщениях), он представлен на листинге~\ref{list:hwbeauty}.
+По причине проблем с поддержкой кириллицы (она встречается в комментариях и
+печатаемых сообщениях), комментарии не отображены ~\ref{list:datecor}.
 %\renewcommand\FBbskip{-20pt} % если хотим притянуть что-то к плавающему окружению из floatrow
-\begin{ListingEnv}[H]% буква H означает Here, ставим здесь,
-    % элементы, которые нежелательно разрывать обычно не ставят
-    % посреди страницы: вместо H используется t (top, сверху страницы),
-    % или b (bottom) или p (page, на отдельной странице)
-%    \captionsetup{format=tablenocaption}% должен стоять до самого caption
-%    \thisfloatsetup{\capposition=top}%
-    \caption{Программа “Hello, world” на \protect\cpp}
-    % далее метка для ссылки:
-    \label{list:hwbeauty}
-    % окружение учитывает пробелы и табляции и приеняет их в сответсвии с настройкми
-    \begin{lstlisting}[language={[ISO]C++}]
-	#include <iostream>
-	using namespace std;
 
-	int main() //кириллица в комментариях при xelatex и lualatex имеет проблемы с пробелами
-	{
-		cout << "Hello, world" << endl; //latin letters in commentaries
-		system("pause");
-		return 0;
-	}
-    \end{lstlisting}
-\end{ListingEnv}%
-Второй не такой красивый, но без ограничений (см.~листинг~\ref{list:hwplain}).
 \begin{ListingEnv}[H]
-    \begin{Verb}
-        
-        #include <iostream>
-        using namespace std;
-        
-        int main() //кириллица в комментариях
-        {
-            cout << "Привет, мир" << endl;
-        }
-    \end{Verb}
-    \caption{Программа “Hello, world” без подсветки}
-    \label{list:hwplain}
+	% элементы, которые нежелательно разрывать обычно не ставят
+	% посреди страницы: вместо H используется t (top, сверху страницы),
+	% или b (bottom) или p (page, на отдельной странице)
+	%    \captionsetup{format=tablenocaption}% должен стоять до самого caption
+	%    \thisfloatsetup{\capposition=top}%
+	\caption{Алгоритм коррекции даты в начале нового месяца на языке R}
+	% далее метка для ссылки:
+	\label{list:datecor}
+	\begin{lstlisting}[language={Renhanced}]
+	# date correction---------------------------------------------------------
+	
+	data.sec<-separate(data.sec, 'YYYY-MM-DD hh:mm:ss-1s',c("date", "time"),
+	sep=' ')
+	data.sec<-separate(data.sec, 'date',c("year", "month", "day"),
+	sep='-', convert = TRUE)
+	# изготовление даты из года и месяца, первого дня месяца и 12:00 по умолчанию
+	data.sec$dates <- ISOdate(data.sec$year, data.sec$month, 1)
+	# получение правильного дня из дня который вышел за границы месяца
+	data.sec$dates <- data.sec$dates + (as.integer(data.sec$day) - 1) * 60*60*24
+	# установка 00:00  
+	data.sec$dates <- data.sec$dates - 60*60*12 
+	# установка вермени по часам прибора
+	data.sec$dates <- data.sec$dates + parse_time(data.sec$time)
+	
+	\end{lstlisting}
 \end{ListingEnv}
 
-Можно использовать первый для вставки небольших фрагментов
-внутри текста, а второй для вставки полного
-кода в приложении, если таковое имеется.
+%\lstset{% general command to set parameter(s)
+%	basicstyle=\footnotesize} % print whole listing small
+\begin{ListingEnv}
+	\caption{Алгоритм коррекции ухода приборных часов на R}
+	\label{list:timecor}
+	\begin{lstlisting}[language={Renhanced}]
+	# time correction ---------------------------------------------------------------
+	
+	data.sec <- data.sec%>%
+	mutate(dates.UTC = data.sec$dates  - 60*60*3 )
+	
+	data.sec <- data.sec[,(-17:-22)]
+	# data.sec$dates <- data.sec$dates - 60*60*3
+	# 
+	# data.sec <- data.sec%>%
+	#   mutate(dates.correct.benghin =  data.sec$`YYYY-MM-DD hh:mm:ss-1s` - ceiling(
+	#     56.77315002 * (data.sec$`YYYY-MM-DD hh:mm:ss-1s` - as.POSIXct('2016-08-21 09:07:00'))/86400   + 60*60*3
+	#   ))
+	
+	# константа постоянного ухода часов прибора
+	kt = (56.77315002) /86400
+	# kt=  (60) /86400
+	# вычитание постоянного ухода часов прибора
+	# data.sec <- data.sec %>%
+	#   mutate(dates.correct.benghin =  data.sec$dates.UTC - ceiling(
+	#     kt* (data.sec$dates.UTC - as.POSIXct('2016-05-10 19:17:00', 'GMT'))
+	#   ))
+	
+	data.sec <- data.sec %>%
+	mutate(dates.correct.benghin =  dates.UTC - ceiling(
+	kt* (dates.UTC - min(dates.UTC))
+	))
+	
+	
+	# восстановление времени начала записи в файл
+	data.sec$timestamp.start <-gsub("depron-","0x",data.sec$filename)
+	data.sec$timestamp.start <-gsub(".dat","",data.sec$timestamp.start)
+	data.sec$timestamp.start <- as.POSIXct(as.integer(data.sec$timestamp.start), 
+	origin="1970-01-01", 'GMT' )
+	# data.sec$timestamp.start <- data.sec$timestamp.start -60*60*3
+	
+	# восстановление времни последней записи в файл
+	data.sec$timestamp.end <- as.POSIXct(strptime(data.sec$timestamp,format="%d.%m.%Y %H:%M"))
+	
+	
+	# получени разности между началом файла и горизонтальным приборным временем
+	data.sec$time.delta.file.start <- as.numeric(data.sec$dates.correct.benghin - data.sec$timestamp.start ,
+	units = "secs") 
+	
+	
+	data.sec <- data.sec %>%
+	group_by(filename) %>%
+	distinct(filename) %>%
+	summarise(delta.minimum = min(time.delta.file.start)) %>%
+	left_join(data.sec, ., by = 'filename')
+	
+	# table(data.sec$delta.minimum)
+	data.sec$time.correct.zolotarev <- data.sec$dates.correct.benghin - data.sec$delta.minimum 
+	
+	
+	
+	# отбор перескоков времени в приборе более 120 с - меньшие значения возможны при нормальной работе, 
+	# большие только при отключениях питания
+	data.sec <-mutate(data.sec, lag.delta = delta.minimum - lag(delta.minimum))
+	table(data.sec$lag.delta)
+	data.sec.switches <-filter(data.sec, abs(lag.delta) >120)
+	
+	
+	
+	data.sec <-  data.sec %>%
+	mutate(switches = cut(data.sec$dates.UTC, 
+	breaks = c(min(data.sec$dates.UTC),
+	data.sec.switches$dates.UTC,
+	max(data.sec$dates.UTC) )))
+	
+	# xy1 <- xyplot( delta.minimum + switches ~ timestamp.start , data = data.sec,
+	#                type = c("o","g"))
+	# plot(xy1)
+	
+	
+	# plot(table(data.sec$delta.minimum))
+	# table(data.sec$delta.minimum)
+	# median(data.sec$delta.minimum)
+	# mfv(data.sec$delta.minimum)
+	
+	
+	
+	# 
+	# if(nrow(data.sec.switches)>0){
+	# data.sec <-  data.sec %>%
+	#   group_by(switches)  %>%
+	#   mutate(med.delta =median(delta.minimum))
+	# }
+	# if(nrow(data.sec.switches)== 0){
+	# data.sec <-  data.sec %>%
+	#   mutate(med.delta =median(delta.minimum))
+	# }
+	
+	# 
+	library('modeest')
+	if(nrow(data.sec.switches)>0){
+	data.sec <-  data.sec %>%
+	group_by(switches)  %>%
+	mutate(mfv.delta =max(mfv(delta.minimum)))
+	}
+	if(nrow(data.sec.switches)== 0){
+	data.sec <-  data.sec %>%
+	mutate(mfv.delta =max(mfv(delta.minimum)))
+	}
+	
+	
+	data.sec <-  data.sec %>%
+	mutate(dates.correct = dates.correct.benghin - mfv.delta)
+	
+	# минус минута так как данные приходят по окончании минуты
+	data.sec$dates.correct <- as.POSIXct(data.sec$dates.correct, 'GMT') - 59
+	
+	data.sec$dates.correct.copy <- as.POSIXct(data.sec$dates.correct, 'GMT')
+	# последняя проверка
+	# получениЕ разности между началом файла и правильным временем
+	data.sec$correct.time.delta.file.start <- as.numeric(data.sec$dates.correct - data.sec$timestamp.start ,
+	units = "secs")
+	\end{lstlisting}
+\end{ListingEnv}
 
-Если нужно вставить совсем короткий пример кода (одна или две строки), то выделение  линейками и нумерация может смотреться чересчур громоздко. В таких случаях можно использовать окружения \texttt{lstlisting} или \texttt{Verb} без \texttt{ListingEnv}. Приведём такой пример с указанием языка программирования, отличного от заданного по умолчанию:
-\begin{lstlisting}[language=R]
+\begin{lstlisting}[language={Renhanced}]
+# time correction ---------------------------------------------------------------
 
-# date correction ---------------------------------------------------------
+data.sec <- data.sec%>%
+mutate(dates.UTC = data.sec$dates  - 60*60*3 )
 
+data.sec <- data.sec[,(-17:-22)]
+# data.sec$dates <- data.sec$dates - 60*60*3
+# 
+# data.sec <- data.sec%>%
+#   mutate(dates.correct.benghin =  data.sec$`YYYY-MM-DD hh:mm:ss-1s` - ceiling(
+#     56.77315002 * (data.sec$`YYYY-MM-DD hh:mm:ss-1s` - as.POSIXct('2016-08-21 09:07:00'))/86400   + 60*60*3
+#   ))
 
-data.sec<-separate(data.sec, 'YYYY-MM-DD hh:mm:ss-1s',c("date", "time"),
-sep=' ')
-data.sec<-separate(data.sec, 'date',c("year", "month", "day"),
-sep='-', convert = TRUE)
+# константа постоянного ухода часов прибора
+kt = (56.77315002) /86400
+# kt=  (60) /86400
+# вычитание постоянного ухода часов прибора
+# data.sec <- data.sec %>%
+#   mutate(dates.correct.benghin =  data.sec$dates.UTC - ceiling(
+#     kt* (data.sec$dates.UTC - as.POSIXct('2016-05-10 19:17:00', 'GMT'))
+#   ))
 
-
-
-# изготовление даты из года и месяца, первого дня месяца и 12:00 по умолчанию
-data.sec$dates <- ISOdate(data.sec$year, data.sec$month, 1)
-# получение правильного дня из дня который вышел за границы месяца
-data.sec$dates <- data.sec$dates + (as.integer(data.sec$day) - 1) * 60*60*24
-# установка 00:00  
-data.sec$dates <- data.sec$dates - 60*60*12 
-# установка вермени по часам прибора
-data.sec$dates <- data.sec$dates + parse_time(data.sec$time)
-
-\end{lstlisting}
-Такое решение~--- со вставкой нумерованных листингов покрупнее
-и вставок без выделения для маленьких фрагментов~--- выбрано,
-например, в книге Эндрю Таненбаума и Тодда Остина по архитектуре
-%компьютера~\autocite{TanAus2013} (см.~рис.~\ref{fig:tan-aus}).
-
-Наконец, для оформления идентификаторов внутри строк
-(функция \lstinline{main} и тому подобное) используется
-\texttt{lstinline} или, самое простое, моноширинный текст
-(\texttt{\textbackslash texttt}).
+data.sec <- data.sec %>%
+mutate(dates.correct.benghin =  dates.UTC - ceiling(
+kt* (dates.UTC - min(dates.UTC))
+))
 
 
-Пример~\ref{list:internal3}, иллюстрирующий подключение переопределённого языка. Может быть полезным, если подсветка кода работает криво. Без дополнительного окружения, с подписью и ссылкой, реализованной встроенным средством.
+# восстановление времени начала записи в файл
+data.sec$timestamp.start <-gsub("depron-","0x",data.sec$filename)
+data.sec$timestamp.start <-gsub(".dat","",data.sec$timestamp.start)
+data.sec$timestamp.start <- as.POSIXct(as.integer(data.sec$timestamp.start), 
+origin="1970-01-01", 'GMT' )
+# data.sec$timestamp.start <- data.sec$timestamp.start -60*60*3
 
-\begin{lstlisting}[language={Renhanced},caption={Листинг восстановления метки даты в секундных массивах},label={list:internal3}]
+# восстановление времни последней записи в файл
+data.sec$timestamp.end <- as.POSIXct(strptime(data.sec$timestamp,format="%d.%m.%Y %H:%M"))
 
+
+# получени разности между началом файла и горизонтальным приборным временем
+data.sec$time.delta.file.start <- as.numeric(data.sec$dates.correct.benghin - data.sec$timestamp.start ,
+units = "secs") 
+
+
+data.sec <- data.sec %>%
+group_by(filename) %>%
+distinct(filename) %>%
+summarise(delta.minimum = min(time.delta.file.start)) %>%
+left_join(data.sec, ., by = 'filename')
+
+# table(data.sec$delta.minimum)
+data.sec$time.correct.zolotarev <- data.sec$dates.correct.benghin - data.sec$delta.minimum 
+
+
+
+# отбор перескоков времени в приборе более 120 с - меньшие значения возможны при нормальной работе, 
+# большие только при отключениях питания
+data.sec <-mutate(data.sec, lag.delta = delta.minimum - lag(delta.minimum))
+table(data.sec$lag.delta)
+data.sec.switches <-filter(data.sec, abs(lag.delta) >120)
+
+
+
+data.sec <-  data.sec %>%
+mutate(switches = cut(data.sec$dates.UTC, 
+breaks = c(min(data.sec$dates.UTC),
+data.sec.switches$dates.UTC,
+max(data.sec$dates.UTC) )))
+
+# xy1 <- xyplot( delta.minimum + switches ~ timestamp.start , data = data.sec,
+#                type = c("o","g"))
+# plot(xy1)
+
+
+# plot(table(data.sec$delta.minimum))
+# table(data.sec$delta.minimum)
+# median(data.sec$delta.minimum)
+# mfv(data.sec$delta.minimum)
+
+
+
+# 
+# if(nrow(data.sec.switches)>0){
+# data.sec <-  data.sec %>%
+#   group_by(switches)  %>%
+#   mutate(med.delta =median(delta.minimum))
+# }
+# if(nrow(data.sec.switches)== 0){
+# data.sec <-  data.sec %>%
+#   mutate(med.delta =median(delta.minimum))
+# }
+
+# 
+library('modeest')
+if(nrow(data.sec.switches)>0){
+data.sec <-  data.sec %>%
+group_by(switches)  %>%
+mutate(mfv.delta =max(mfv(delta.minimum)))
+}
+if(nrow(data.sec.switches)== 0){
+data.sec <-  data.sec %>%
+mutate(mfv.delta =max(mfv(delta.minimum)))
+}
+
+
+data.sec <-  data.sec %>%
+mutate(dates.correct = dates.correct.benghin - mfv.delta)
+
+# минус минута так как данные приходят по окончании минуты
+data.sec$dates.correct <- as.POSIXct(data.sec$dates.correct, 'GMT') - 59
+
+data.sec$dates.correct.copy <- as.POSIXct(data.sec$dates.correct, 'GMT')
+# последняя проверка
+# получениЕ разности между началом файла и правильным временем
+data.sec$correct.time.delta.file.start <- as.numeric(data.sec$dates.correct - data.sec$timestamp.start ,
+units = "secs")
 \end{lstlisting}
 %
 %Листинг~\ref{list:external1} подгружается из внешнего файла. Приходится загружать без окружения дополнительного. Иначе по страницам не переносится.
