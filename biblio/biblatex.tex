@@ -3,17 +3,19 @@
 %\usepackage{csquotes} % biblatex рекомендует его подключать. Пакет для оформления сложных блоков цитирования.
 
 %%% Загрузка пакета с основными настройками %%%
-\usepackage[%
-backend=biber,% движок
-bibencoding=utf8,% кодировка bib файла
-sorting=none,% настройка сортировки списка литературы
-style=gost-numeric,% стиль цитирования и библиографии (по ГОСТ)
-language=auto,% получение языка из babel/polyglossia
-autolang=other,% многоязычная библиография
-clearlang=true,% внутренний сброс поля language, если он совпадает с языком из babel/polyglossia
-defernumbers=true,% нумерация проставляется после двух компиляций, зато позволяет выцеплять библиографию по ключевым словам и нумеровать не из большего списка
-sortcites=true,% сортировать номера затекстовых ссылок при цитировании (если в квадратных скобках несколько ссылок, то отображаться будут отсортированно, а не абы как)
-]{biblatex}
+%\usepackage[%
+%backend=biber,% движок
+%bibencoding=utf8,% кодировка bib файла
+%sorting=none,% настройка сортировки списка литературы
+%style=gost-numeric,% стиль цитирования и библиографии (по ГОСТ)
+%language=auto,% получение языка из babel/polyglossia
+%autolang=other,% многоязычная библиография
+%clearlang=true,% внутренний сброс поля language, если он совпадает с языком из babel/polyglossia
+%defernumbers=true,% нумерация проставляется после двух компиляций, зато позволяет выцеплять библиографию по ключевым словам и нумеровать не из большего списка
+%sortcites=true,% сортировать номера затекстовых ссылок при цитировании (если в квадратных скобках несколько ссылок, то отображаться будут отсортированно, а не 
+%%абы как)
+%]
+\usepackage[backend=biber,bibencoding=utf8,sorting=none,style=gost-numeric,language=auto,autolang=other,clearlang=true,defernumbers=true,sortcites=true]{biblatex}
 
 
 
