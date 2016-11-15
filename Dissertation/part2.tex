@@ -487,7 +487,8 @@ int main()
 
 
 \section{Градуировочные  характеристики прибора}
-Градуировка прибора ДЭПРОН проводится с использованием зависимости \ref{eq:benghin_doze_code}
+Градуировка прибора ДЭПРОН проводится с использованием известной зависимости 
+\ref{eq:benghin_doze_code}
 
 \begin{equation}\label{eq:benghin_doze_code}
 D = \frac{E}{m} = \dfrac{w_i \cdot\frac{q}{e}}{m} = \frac{w_i \cdot \Delta U \cdot\sum K \cdot C}{m \cdot e \cdot \eta}  = V \cdot \sum K
@@ -529,7 +530,8 @@ D = \frac{E}{m} = \dfrac{w_i \cdot\frac{q}{e}}{m} = \frac{w_i \cdot \Delta U \cd
 спектральную чувствительность к различным типа излучений, были проведены только 
 калибровки детектирующих узлов на радиоактивных источниках. 
 
-По соображениям Бенгина В.В. наиболее чувствительный параметр - скорость счета 
+По соображениям Бенгина В.В. наиболее чувствительный параметр --- скорость 
+счета 
 детектора 1. Так как детектор закрыт сверху алюминиевой крышкой толщиной 2 мм, 
 он должен быть чувствителен к протонам с энергией больше 20 МэВ и электронам с 
 энергией больше примерно 0,5 МэВ, а также - возможно - к тормозному излучению. 
@@ -541,17 +543,40 @@ D = \frac{E}{m} = \dfrac{w_i \cdot\frac{q}{e}}{m} = \frac{w_i \cdot \Delta U \cd
 Бете\cite{Bethe1930} с поправкой Штернхаймера \cite{Sternheimer1952} на 
 плотность вещества  и подробно описана в 
 ряде статей этого института \cite{Bichsel1992,Ashley1972}.
+
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.9\linewidth]{images/Rplot01}
-	\includegraphics[width=0.9\linewidth]{images/Rplot02}
+	\fcolorbox{red}{yellow}{\includegraphics[width=0.6\linewidth]{images/Rplot01}
+	\includegraphics[width=0.6\linewidth]{images/Rplot02}}
 	\caption{Графики средних пробегов заряженных частиц для алюминия. 
-	Представлены величины }
+	Представлены величины: ``CSDA range'' --- глубина в приближении 
+	непрерывного замедления
+	``Projected range'' --- среднее значение глубины, на которую заряженная 
+	частица проникает в процессе замедления до остановки}
 	\label{fig:rplot01}
 \end{figure}
 
+\begin{figure}
+	\centering
+	\fcolorbox{red}{yellow}{
+		{\color{green}
+		\stackinset{l}{1in}{b}{1.1in}{\rotatebox{0}{\rule{3.5in}{1pt}}}{%
+			\stackinset{l}{.3in}{b}{}{\rotatebox{85}{\rule{4in}{1pt}}}{%
+				\stackinset{r}{.5in}{b}{}{\rotatebox{-80}{\rule{4in}{1pt}}}{%
+					\stackinset{r}{1in}{b}{-.3in}{\rotatebox{-85}{\rule{4in}{1pt}}}{%
+						\includegraphics[width=3.5in]{images/graph_elec}
+						\includegraphics[width=3.5in]{images/graph_prot}
+						%\includegraphics[width=0.7\linewidth]{images/graph_alpha}%
+	}}}}}}
+	\caption{}
+\label{fig:graphelec}
+\end{figure}
+
 Пользуясь представленными зависимостями, для уточненной минимальной толщины 
-корпуса прибора - она составляет 2,5 мм, была повышена предварительная оценка  
+корпуса прибора --- она составляет 2,5 мм, что составляет 0,65 
+г/см\textsuperscript{2}, была 
+повышена предварительная 
+оценка  
 порога нижних энергий которые способен регистрировать Дэпрон по электронам до 1 
 МэВ и по протонам до 80 МэВ. Так как эти зависимости могут использоваться 
 только для средних пробегов частиц, для оценки функции энергетической 
