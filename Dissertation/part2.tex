@@ -310,133 +310,10 @@ MS received 12 October 1971, in revised form 18 November
 
 
 \subsubsection{Процедура обработки данных с детекторов}
-{\small 
-\begin{verbatim}
-void Detectors_Handling(void)
-{  
-	//int i; char* p1; // char* p2;
-	int J, K;
-	if (!Detectors_Flugs) {
-		long interrupt_register = AT91C_BASE_PIOB->PIO_ISR;    
-		return;
-	}  
-	Temporal_buff.FLUGS = Detectors_Flugs;
-	// Prot_Comp_1++;    //__________________________ !!! FOR debuging !!! ________________
-	if (Detectors_Flugs & Detec_Flug_ADC){
-		dataADC = External_ADC_Read_Double();
-		Temporal_buff.ADC_code = dataADC;
-	} else dataADC = 0;
-	
-	
-	if (Detectors_Flugs & Detec_Flug_compar){
-		Prot_Comp_1++;  Prot_Comp_2++;  
-		J= (((dataADC+3)>>3) & 0X00000FFF);
-		Dose_Comp_1+=J;
-		K= Digital_Compression(J);
-		if (K<2) K=2; if(K>63) K=63;
-		Spectra[2][K]++;
-		
-		//  ADC_code_2=dataADC+0x00030000;
-		
-		J= (((dataADC+0x00030000)>>19) & 0X00000FFF);   //(short )
-		Dose_Comp_2+=J;
-		K= Digital_Compression(J);
-		if (K<2) K=2; if(K>63) K=63;
-		Spectra[3][K]++;
-		
-	} else {
-	if ((Detectors_Flugs & Detec_Flug_P1)&&( dataADC & 0X00003FF0)){
-		J= (((dataADC+3)>>3) & 0X00000FFF);
-		Dose_1+=J;  Prot_1++;
-		K= Digital_Compression(J);
-		if (K<2) K=2; if(K>63) K=63;
-		Spectra[0][K]++;
-	}
-	if ((Detectors_Flugs & Detec_Flug_P2)&&( dataADC & 0X3FF00000)){
-		J= (((dataADC+0x00030000)>>19) & 0X00000FFF);
-		Dose_2+=J;  Prot_2++;
-		
-		K= Digital_Compression(J);
-		if (K<2) K=2; if(K>63) K=63;
-		Spectra[1][K]++;
-		
-	}
-}
-if (Detectors_Flugs & Detec_Flug_N1){      
-	Neutron_1 += Neut_1;
-	Neut_1 = 0;
-} 
 
-if (Detectors_Flugs & Detec_Flug_N2){       
-	Neutron_2 += Neut_2; 
-	Neut_2 = 0;
-} 
-
-if(Temporal_buff.interr_reg & Detector_Interrupt_t1) {
-	if(High_Ampl_Buffer.ind==0){
-		High_Ampl_Buffer.day[0]= t_info.day;
-		High_Ampl_Buffer.day[1]= t_info.Mounth;
-	}    
-	High_Ampl_Buffer.HA[High_Ampl_Buffer.ind].ADC_code = dataADC;
-	High_Ampl_Buffer.HA[High_Ampl_Buffer.ind].ta[0] = tick_1;
-	High_Ampl_Buffer.HA[High_Ampl_Buffer.ind].ta[1] = t_info.secunde;
-	High_Ampl_Buffer.HA[High_Ampl_Buffer.ind].ta[2] = t_info.minute;
-	High_Ampl_Buffer.HA[High_Ampl_Buffer.ind].ta[3] = t_info.hour;
-	High_Ampl_Buffer.ind++;
-	if(High_Ampl_Buffer.ind>62) Send_High_Ampl_Buffer();    
-}     
-//For Neutron burst 
-unsigned long N_T;
-unsigned short millisec_time = AT91C_BASE_TC2->TC_CV;
-millisec_time = millisec_time >>3;   //40 kHz / 8 = 5 kHz
-if ((Pronon_Fon < Proton_Level) && (N_ind > 0) && (Detectors_Flugs & Detec_Flug_Neutron)){      
-	if (((millisec_time - Old_Tick_2)< D_tick_2) && (Old_Sec== t_info.day_second)){
-		N_T= t_info.day_second <<15;
-		N_T |= Old_Tick_2 & 0x00001fff;
-		if (Detectors_Flugs & Detec_Flug_N1) N_T |= 0x00002000;
-		if (Detectors_Flugs & Detec_Flug_N2) N_T |= 0x00004000;
-		Neutron_Bunch.neutron_t[i_n_t++]=N_T;
-		if(i_n_t>126) Send_Neutron_Bunch();
-	}
-}
-Old_Sec = t_info.day_second;
-Old_Tick_2 = millisec_time;        
-
-
-Detectors_Flugs=0;
-
-}  
-\end{verbatim}
-}
-
+Основная часть программной обработки данных с детекторов прибора производится в процедуре Detectors\_Handling \ref{list:Detectors_Handling}
 \todo{Блок схема работы процедуры Detectors\_Handling}
 
-{\small 
-\begin{verbatim}
-// Test conversion program
-	
-#include <iostream>
-#include <string>
-
-int main()
-{
-	std::string name;
-	//getline (std::cin, name);
-	unsigned short dataADC, J, K, L;
-	dataADC = 114;
-	
-	std::cout << "Was " << dataADC << "!\n";
-	
-	J= (((dataADC+3)>>3) & 0X00000FFF);
-	
-	std::cout << "Present " << J << "!\n";
-	K= (J<<3);
-	std::cout << "Left shift " << K << "!\n";
-	L= (J*8);
-	std::cout << "Multyply*8 " << L << "!\n";
-}
-\end{verbatim}
-}
 
 
 
@@ -505,18 +382,18 @@ D = \frac{E}{m} = \dfrac{w_i \cdot\frac{q}{e}}{m} = \frac{w_i \cdot \Delta U \cd
 
 Детектор1: 3,4141 КэВ/канал 
 
-Детектор2: 4 КэВ/канал - очень большой разброс по калибровкам - не могу понять почему:15.4 – 16.3 КэВ/канал. Необходимо найти исходные данные калибровок.
+Детектор2: 4 КэВ/канал - очень большой разброс по калибровкам - не могу понять почему:15.4 – 16.3 КэВ/канал. \todo{Необходимо найти исходные данные калибровок.}
 
-В ходе калибровок получено, что одной еденице по дозе детектора 1 соответствует 135 счетных имульсов в детектору 1, получается что умножив 135 на 3,4141  КэВ/канал  получаем энергетический эквивалент 3687 КэВ/(дозовый импульс) 
+В ходе калибровок получено, что одной единице по дозе детектора 1 соответствует 135 счетных импульсов в детектору 1, получается что умножив 135 на 3,4141  КэВ/канал  получаем энергетический эквивалент 3687 КэВ/(дозовый импульс) 
 
-Так как мы имеем квадратный детектор с размерами 10мм * 10мм* 300мкм, оценим массу чувствительного объема детектора, подборав значения толщины тормозящего слоя вещества $ 0.0013 $ г/см$^2 $. Такая масса соответствует 5,58 мкм кремния или 1,04 см воздуха, а масса детектора соответственно: 0,0687г.
+Так как мы имеем квадратный детектор с размерами 10мм * 10мм* 300мкм, оценим массу чувствительного объема детектора, подобрав значения толщины тормозящего слоя вещества $ 0.0013 $ г/см$^2 $. Такая масса соответствует 5,58 мкм кремния или 1,04 см воздуха, а масса детектора соответственно: 0,0687г.
 
-Дет1: 8,69пГр/кодАЦП  0,06952 = наноГрей/импульс(умноженное на 8)
+Дет1: 8,69 пГр/кодАЦП  0,06952 = наноГрей/импульс(умноженное на 8)
 
-Дет2: 9,32пГр/кодАЦП  0,07456 = наноГрей/импульс(умноженное на 8)
+Дет2: 9,32 пГр/кодАЦП  0,07456 = наноГрей/импульс(умноженное на 8)
 
 
-В программе микроконтроллера Дэпрон с целью сокращения передачи неинформативных 
+В программе микроконтроллера Дэпрон с целью сокращения передачи не информативных 
 каналов АЦП был сделан сдвиг на 3 разряда при записи в спектр энерговыделения, 
 такая операция близка к операции деления на 8.
 
@@ -546,8 +423,12 @@ D = \frac{E}{m} = \dfrac{w_i \cdot\frac{q}{e}}{m} = \frac{w_i \cdot \Delta U \cd
 
 \begin{figure}[H]
 	\centering
-	\fcolorbox{red}{yellow}{\includegraphics[width=0.6\linewidth]{images/Rplot01}
-	\includegraphics[width=0.6\linewidth]{images/Rplot02}}
+	%	\fcolorbox{red}{yellow}{\includegraphics[width=0.6\linewidth]{images/pdata}
+%	\includegraphics[width=0.6\linewidth]{images/adata}}
+
+	\includegraphics[width=0.32\linewidth]{images/edata}
+	\includegraphics[width=0.32\linewidth]{images/pdata}
+	\includegraphics[width=0.32\linewidth]{images/adata}
 	\caption{Графики средних пробегов заряженных частиц для алюминия. 
 	Представлены величины: ``CSDA range'' --- глубина в приближении 
 	непрерывного замедления
@@ -556,30 +437,24 @@ D = \frac{E}{m} = \dfrac{w_i \cdot\frac{q}{e}}{m} = \frac{w_i \cdot \Delta U \cd
 	\label{fig:rplot01}
 \end{figure}
 
-\begin{figure}
-	\centering
-	\fcolorbox{red}{yellow}{
-		{\color{green}
-		\stackinset{l}{1in}{b}{1.1in}{\rotatebox{0}{\rule{3.5in}{1pt}}}{%
-			\stackinset{l}{.3in}{b}{}{\rotatebox{85}{\rule{4in}{1pt}}}{%
-				\stackinset{r}{.5in}{b}{}{\rotatebox{-80}{\rule{4in}{1pt}}}{%
-					\stackinset{r}{1in}{b}{-.3in}{\rotatebox{-85}{\rule{4in}{1pt}}}{%
-						\includegraphics[width=3.5in]{images/graph_elec}
-						\includegraphics[width=3.5in]{images/graph_prot}
-						%\includegraphics[width=0.7\linewidth]{images/graph_alpha}%
-	}}}}}}
-	\caption{}
-\label{fig:graphelec}
-\end{figure}
-
 Пользуясь представленными зависимостями, для уточненной минимальной толщины 
-корпуса прибора --- она составляет 2,5 мм, что составляет 0,65 
-г/см\textsuperscript{2}, была 
-повышена предварительная 
-оценка  
-порога нижних энергий которые способен регистрировать Дэпрон по электронам до 1 
-МэВ и по протонам до 80 МэВ. Так как эти зависимости могут использоваться 
-только для средних пробегов частиц, для оценки функции энергетической 
-чувствительности требуется более подробный анализ, который может быть 
-произведен с помошью Монте-Карло моделирования.
+корпуса прибора --- она составляет 2,5 мм, что составляет 0,65  г/см\textsuperscript{2}, была  повышена предварительная оценка  порога нижних энергий которые способен регистрировать ДЭПРОН по электронам до 1 МэВ и по протонам до 20 МэВ. Для ядер гелия прибор чувствителен начиная с 90 МэВ. Так как эти зависимости могут использоваться только для средних пробегов частиц, для оценки функции энергетической чувствительности требуется более подробный анализ, который может быть произведен с помошью Монте-Карло моделирования.
 
+
+%\begin{figure}
+%	\centering
+%	\fcolorbox{red}{yellow}{
+%		{\color{green}
+%		\stackinset{l}{1in}{b}{1.1in}{\rotatebox{0}{\rule{3.5in}{1pt}}}{%
+%			\stackinset{l}{.3in}{b}{}{\rotatebox{85}{\rule{4in}{1pt}}}{%
+%				\stackinset{r}{.5in}{b}{}{\rotatebox{-80}{\rule{4in}{1pt}}}{%
+%					
+%\stackinset{r}{1in}{b}{-.3in}{\rotatebox{-85}{\rule{4in}{1pt}}}{%
+%						\includegraphics[width=3.5in]{images/graph_elec}
+%						\includegraphics[width=3.5in]{images/graph_prot}
+%						
+%%%\includegraphics[width=0.7\linewidth]{images/graph_alpha}%
+%	}}}}}}
+%	\caption{}
+%\label{fig:graphelec}
+%\end{figure}
