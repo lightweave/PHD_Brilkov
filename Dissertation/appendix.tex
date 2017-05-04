@@ -445,7 +445,7 @@
 По причине проблем с поддержкой кириллицы (она встречается в комментариях и
 печатаемых сообщениях), комментарии не отображены ~\ref{list:datecor}.
 %\renewcommand\FBbskip{-20pt} % если хотим притянуть что-то к плавающему окружению из floatrow
-Процедура \texttt{Detectors\_Handling} \todo{описание}
+Процедура \texttt{Detectors\_Handling} является основной процедурой цифровой обработки данных детекторов Дэпрон.
 % далее метка для ссылки:
 \label{list:Detectors_Handling}
 \begin{lstlisting}[language={[ISO]C++}]
@@ -583,8 +583,7 @@ void Detectors_Handling(void)
 	\begin{lstlisting}[language={Renhanced}, ]
 	\end{lstlisting}
 \end{ListingEnv}
-\begin{lstlisting}[language={Renhanced}, ]
-\end{ListingEnv}
+
 \begin{lstlisting}[language={Renhanced}, ]
 # time correction------------------------------------------------------------
 
@@ -687,310 +686,1199 @@ data.sec$timestamp.start, units = "secs")
 
 
 
+\chapter{Листинги программного кода моделирования ДЭПРОН} \label{AppendixС}
+\begin{lstlisting}[language=XML, firstline=1, lastline=89]
+<?xml version="1.0" encoding="UTF-8"?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+<define>
+<position name="central" x="0" y="0" z="0" unit="mm"/>
+<rotation name="identity" x="0" y="0" z="0" unit="degree"/>
+<variable name="DEGtoRAD" value="1.74532925199433E-02"/>
+</define>
+<materials>
+
+<isotope name="he3_iso" Z="2" N="3"><atom type="A" value="3.0160293"/></isotope> 
+
+<element name="he3_ele" ><fraction n="1" ref="he3_iso" /></element>
+
+<material formula="he" name="He3" ><D value="0.00066975" /><fraction n="1" ref="he3_ele" /></material>
+
+<material name="PCB" state="solid">
+<D value="2.31"  unit="g/cm3"/>
+<!--//pcbNchip Cu9Si5C460H506O138 epoxy + silicon + copper
+//weight ratio 57.7:4:1
+density = 2.31*g/cm3;
+pcbNchip = new G4Material(name="Pcb&Chip", density, nElem=5);
+pcbNchip->AddElement(elH, nAtoms=506);
+pcbNchip->AddElement(elC, nAtoms=460);
+pcbNchip->AddElement(elO, nAtoms=138);
+pcbNchip->AddElement(elSi, nAtoms=5);
+pcbNchip->AddElement(elCu, nAtoms=9);-->
+<fraction n="0.056951255" ref="G4_H"/>
+<!-- 1.00794*506=510.01764-->
+<fraction n="0.616957286" ref="G4_C"/>
+<!-- 12.011*460=5525.06-->
+<fraction n="0.246547658" ref="G4_O"/>
+<!-- 15.9994*138=2207.9172-->
+<fraction n="0.015680874" ref="G4_Si"/>
+<!-- 28.0855*5=140.4275-->
+<fraction n="0.063862928" ref="G4_Cu"/>
+<!-- 63.546*9=571.914-->
+<!-- Total 8955.33634-->
+</material>
+
+<material name="D16" state="solid">
+<D value="2.77"  unit="g/cm3"/>
+<!--//aluminium alloy d16
+Fe	Si	Mn		Cr	Ti	Al		Cu		Mg		Zn	Other				-
+<0.5	<0.5	0.3 - 0.9	<0.1	<0.15	90.9 - 94.7	3.8 - 4.9	1.2 - 1.8	<0.25	all other 0.05; total 0.15	Ti+Zr < 0.2
+G4Material::AddMaterial WARNING !! for D16 sum of fractional masses 0.0874738 is not 1 - results may be wrong
+-->
+<fraction n="0.0050"  ref="G4_Fe"/>
+<fraction n="0.0050"  ref="G4_Si"/>
+<fraction n="0.0090"  ref="G4_Mn"/>
+<fraction n="0.9302"  ref="G4_Al"/>
+<fraction n="0.0490"  ref="G4_Cu"/>
+<fraction n="0.0018"  ref="G4_Mg"/>
+</material>
+
+</materials>
+<solids>
+<trd name="CoverVytochka_PartBody" x1="(1.5)*2" x2="(1.5)*2" y1="(30)*2" y2="(3)*2" z="(13.5)*2" lunit="mm"/>
+<trd name="CoverVytochka2_PartBody" x1="(1.5)*2" x2="(1.5)*2" y1="(20)*2" y2="(0.001)*2" z="(10)*2" lunit="mm"/>
+<box name="PCB1_PartBody" x="(0.75)*2" y="(25)*2" z="(17)*2" lunit="mm"/>
+<box name="PCB2_PartBody" x="(20)*2" y="(40)*2" z="(0.75)*2" lunit="mm"/>
+<tube name="PCB3hole_PartBody" rmin="0" rmax="5" z="(0.75)*2" startphi="0" deltaphi="360" lunit="mm" aunit="degree"/>
+<box name="PCB3_PartBody" x="(0.75)*2" y="(25)*2" z="(17)*2" lunit="mm"/>
+<tube name="si13tube_PartBody" rmin="15" rmax="16" z="(85)*2" startphi="0" deltaphi="360" lunit="mm" aunit="degree"/>
+<tube name="si13n_PartBody" rmin="0" rmax="15" z="(95)*2" startphi="0" deltaphi="360" lunit="mm" aunit="degree"/>
+<box name="Detector_PartBody" x="(5)*2" y="(5)*2" z="(0.15)*2" lunit="mm"/>
+<box name="Detector_PartBody" x="(5)*2" y="(5)*2" z="(0.15)*2" lunit="mm"/>
+<box name="G4Space_PartBody" x="(100)*2" y="(16)*2" z="(16)*2" lunit="mm"/>
+<box name="Shield_PartBody" x="(110)*2" y="(24.5)*2" z="(24.5)*2" lunit="mm"/>
+<box name="CoverFront2_PartBody" x="(2.5)*2" y="(75)*2" z="(35)*2" lunit="mm"/>
+<box name="CoverSide_PartBody" x="(125)*2" y="(2.5)*2" z="(35)*2" lunit="mm"/>
+<box name="CoverTop_PartBody" x="(125)*2" y="(80)*2" z="(2.5)*2" lunit="mm"/>
+<box name="CoverBottom_PartBody" x="(125)*2" y="(80)*2" z="(2.5)*2" lunit="mm"/>
+<box name="casset_cover_front_PartBody" x="(0.05)*2" y="(25)*2" z="(17)*2" lunit="mm"/>
+<box name="casset_cover_top_PartBody" x="(50)*2" y="(26)*2" z="(0.15)*2" lunit="mm"/>
+<box name="casset_cover_side_PartBody" x="(50)*2" y="(0.25)*2" z="(17)*2" lunit="mm"/>
+<box name="cassete_cover_top_vert_PartBody" x="(0.15)*2" y="(26)*2" z="(33)*2" lunit="mm"/>
+<box name="casset_cover_side_vert_PartBody" x="(17)*2" y="(0.25)*2" z="(33)*2" lunit="mm"/>
+<box name="G4Cover_PartBody" x="(125)*2" y="(80)*2" z="(41)*2" lunit="mm"/>
+<box name="G4World_PartBody" x="(1000)*2" y="(1000)*2" z="(1000)*2" lunit="mm"/>
+</solids>
+<structure>
+<volume name="CoverVytochka">
+<materialref ref="G4_AIR"/>
+<solidref ref="CoverVytochka_PartBody"/>
+</volume>
+<volume name="CoverVytochka2">
+<materialref ref="G4_AIR"/>
+<solidref ref="CoverVytochka2_PartBody"/>
+</volume>
+<volume name="PCB1">
+<materialref ref="PCB"/>
+<solidref ref="PCB1_PartBody"/>
+</volume>
+<volume name="PCB2">
+<materialref ref="PCB"/>
+<solidref ref="PCB2_PartBody"/>
+</volume>
+<volume name="PCB3hole">
+<materialref ref="G4_AIR"/>
+<solidref ref="PCB3hole_PartBody"/>
+</volume>
+<volume name="PCB3">
+<materialref ref="PCB"/>
+<solidref ref="PCB3_PartBody"/>
+<physvol>
+<volumeref ref="PCB3hole"/>
+<position name="PCB3_pos_PCB3hole_1" x="0" y="10" z="0" unit="mm"/>
+<rotation name="PCB3_rot_PCB3hole_1" x="0" y="-90" z="0" unit="degree"/>
+</physvol>
+</volume>
+<volume name="si13tube">
+<materialref ref="G4_Fe"/>
+<solidref ref="si13tube_PartBody"/>
+</volume>
+<volume name="si13n1">
+<materialref ref="He3"/>
+<solidref ref="si13n_PartBody"/>
+</volume>
+<volume name="si13n2">
+<materialref ref="He3"/>
+<solidref ref="si13n_PartBody"/>
+</volume>
+<volume name="Detector1">
+<materialref ref="G4_Si"/>
+<solidref ref="Detector_PartBody"/>
+</volume>
+<volume name="Detector2">
+<materialref ref="G4_Si"/>
+<solidref ref="Detector_PartBody"/>
+</volume>
+<volume name="G4Space">
+<materialref ref="G4_AIR"/>
+<solidref ref="G4Space_PartBody"/>
+<physvol>
+<volumeref ref="si13n1"/>
+<position name="G4Space_pos_si13n_1" x="0" y="0" z="0" unit="mm"/>
+<rotation name="G4Space_rot_si13n_1" x="0" y="-90" z="0" unit="degree"/>
+</physvol>
+<physvol>
+<volumeref ref="si13tube"/>
+<position name="G4Space_pos_si13tube_1" x="0" y="0" z="0" unit="mm"/>
+<rotation name="G4Space_rot_si13tube_1" x="0" y="-90" z="0" unit="degree"/>
+</physvol>
+</volume>
+<volume name="Shield">
+<materialref ref="G4_PLEXIGLASS"/>
+<solidref ref="Shield_PartBody"/>
+<physvol>
+<volumeref ref="G4Space"/>
+<position name="Shield_pos_G4Space_1" x="0" y="0" z="0" unit="mm"/>
+<rotation name="Shield_rot_G4Space_1" x="0" y="0" z="0" unit="degree"/>
+</physvol>
+</volume>
+<volume name="CoverFront2">
+<materialref ref="D16"/>
+<solidref ref="CoverFront2_PartBody"/>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverFront2__pos__CoverVytochka2_0" x="-1" y="-60.57" z=" 24" unit="mm"/>
+<rotation name="CoverFront2__rot__CoverVytochka2_0" x="-45" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverFront2__pos__CoverVytochka2_1" x="-1" y="-24.57" z=" 24" unit="mm"/>
+<rotation name="CoverFront2__rot__CoverVytochka2_1" x="-45" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverFront2__pos__CoverVytochka2_2" x="-1" y=" 11.43" z=" 24" unit="mm"/>
+<rotation name="CoverFront2__rot__CoverVytochka2_2" x="-45" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverFront2__pos__CoverVytochka2_3" x="-1" y=" 47.43" z=" 24" unit="mm"/>
+<rotation name="CoverFront2__rot__CoverVytochka2_3" x="-45" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverFront2__pos__CoverVytochka2_0" x="-1" y="-46.428" z=" 8.858" unit="mm"/>
+<rotation name="CoverFront2__rot__CoverVytochka2_0" x=" 135" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverFront2__pos__CoverVytochka2_1" x="-1" y="-10.428" z=" 8.858" unit="mm"/>
+<rotation name="CoverFront2__rot__CoverVytochka2_1" x=" 135" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverFront2__pos__CoverVytochka2_2" x="-1" y=" 25.572" z=" 8.858" unit="mm"/>
+<rotation name="CoverFront2__rot__CoverVytochka2_2" x=" 135" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverFront2__pos__CoverVytochka2_3" x="-1" y=" 61.572" z=" 8.858" unit="mm"/>
+<rotation name="CoverFront2__rot__CoverVytochka2_3" x=" 135" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverFront2__pos__CoverVytochka2_0" x="-1" y="-60.571" z="-9.285" unit="mm"/>
+<rotation name="CoverFront2__rot__CoverVytochka2_0" x="-45" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverFront2__pos__CoverVytochka2_1" x="-1" y="-24.571" z="-9.285" unit="mm"/>
+<rotation name="CoverFront2__rot__CoverVytochka2_1" x="-45" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverFront2__pos__CoverVytochka2_2" x="-1" y=" 11.429" z="-9.285" unit="mm"/>
+<rotation name="CoverFront2__rot__CoverVytochka2_2" x="-45" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverFront2__pos__CoverVytochka2_3" x="-1" y=" 47.429" z="-9.285" unit="mm"/>
+<rotation name="CoverFront2__rot__CoverVytochka2_3" x="-45" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverFront2__pos__CoverVytochka2_0" x="-1" y="-46.429" z="-24.427" unit="mm"/>
+<rotation name="CoverFront2__rot__CoverVytochka2_0" x=" 135" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverFront2__pos__CoverVytochka2_1" x="-1" y="-10.429" z="-24.427" unit="mm"/>
+<rotation name="CoverFront2__rot__CoverVytochka2_1" x=" 135" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverFront2__pos__CoverVytochka2_2" x="-1" y=" 25.571" z="-24.427" unit="mm"/>
+<rotation name="CoverFront2__rot__CoverVytochka2_2" x=" 135" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverFront2__pos__CoverVytochka2_3" x="-1" y=" 61.571" z="-24.427" unit="mm"/>
+<rotation name="CoverFront2__rot__CoverVytochka2_3" x=" 135" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+</volume>
+<volume name="CoverSide">
+<materialref ref="D16"/>
+<solidref ref="CoverSide_PartBody"/>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_0" x="-115.93" y="-1" z=" 25.928" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_0" x=" 0" y=" 45" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_1" x="-79.93" y="-1" z=" 25.928" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_1" x=" 0" y=" 45" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_2" x="-43.93" y="-1" z=" 25.928" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_2" x=" 0" y=" 45" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_3" x="-7.93000000000001" y="-1" z=" 25.928" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_3" x=" 0" y=" 45" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_4" x=" 28.07" y="-1" z=" 25.928" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_4" x=" 0" y=" 45" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_5" x=" 64.07" y="-1" z=" 25.928" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_5" x=" 0" y=" 45" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_6" x=" 100.07" y="-1" z=" 25.928" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_6" x=" 0" y=" 45" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_0" x="-101.788" y="-1" z=" 10.786" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_0" x=" 0" y="-135" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_1" x="-65.788" y="-1" z=" 10.786" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_1" x=" 0" y="-135" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_2" x="-29.788" y="-1" z=" 10.786" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_2" x=" 0" y="-135" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_3" x=" 6.212" y="-1" z=" 10.786" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_3" x=" 0" y="-135" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_4" x=" 42.212" y="-1" z=" 10.786" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_4" x=" 0" y="-135" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_5" x=" 78.212" y="-1" z=" 10.786" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_5" x=" 0" y="-135" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_6" x=" 114.212" y="-1" z=" 10.786" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_6" x=" 0" y="-135" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_0" x="-115.931" y="-1" z="-5.357" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_0" x=" 0" y=" 45" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_1" x="-79.931" y="-1" z="-5.357" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_1" x=" 0" y=" 45" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_2" x="-43.931" y="-1" z="-5.357" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_2" x=" 0" y=" 45" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_3" x="-7.931" y="-1" z="-5.357" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_3" x=" 0" y=" 45" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_4" x=" 28.069" y="-1" z="-5.357" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_4" x=" 0" y=" 45" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_5" x=" 64.069" y="-1" z="-5.357" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_5" x=" 0" y=" 45" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_6" x=" 100.069" y="-1" z="-5.357" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_6" x=" 0" y=" 45" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_0" x="-101.789" y="-1" z="-20.499" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_0" x=" 0" y="-135" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_1" x="-65.789" y="-1" z="-20.499" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_1" x=" 0" y="-135" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_2" x="-29.789" y="-1" z="-20.499" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_2" x=" 0" y="-135" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_3" x=" 6.211" y="-1" z="-20.499" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_3" x=" 0" y="-135" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_4" x=" 42.211" y="-1" z="-20.499" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_4" x=" 0" y="-135" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_5" x=" 78.211" y="-1" z="-20.499" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_5" x=" 0" y="-135" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka2"/>
+<position name="CoverSide__pos__CoverVytochka2_6" x=" 114.211" y="-1" z="-20.499" unit="mm"/>
+<rotation name="CoverSide__rot__CoverVytochka2_6" x=" 0" y="-135" z="-90" unit="deg"/>
+</physvol>
+</volume>
+<volume name="CoverTop">
+<materialref ref="D16"/>
+<solidref ref="CoverTop_PartBody"/>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_0" x="-93" y=" 24.5" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_0" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_1" x="-31" y=" 24.5" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_1" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_2" x=" 31" y=" 24.5" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_2" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_3" x=" 93" y=" 24.5" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_3" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_0" x="-93" y=" 56.5" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_0" x=" 90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_1" x="-31" y=" 56.5" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_1" x=" 90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_2" x=" 31" y=" 56.5" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_2" x=" 90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_3" x=" 93" y=" 56.5" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_3" x=" 90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_0" x="-93" y="-56.5" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_0" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_1" x="-31" y="-56.5" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_1" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_2" x=" 31" y="-56.5" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_2" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_3" x=" 93" y="-56.5" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_3" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_0" x="-93" y="-24.5" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_0" x=" 90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_1" x="-31" y="-24.5" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_1" x=" 90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_2" x=" 31" y="-24.5" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_2" x=" 90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_3" x=" 93" y="-24.5" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_3" x=" 90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_0" x="-62" y=" 62" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_0" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_1" x=" 0" y=" 62" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_1" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_2" x=" 62" y=" 62" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_2" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_0" x="-62" y="-62" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_0" x=" 90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_1" x=" 0" y="-62" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_1" x=" 90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_2" x=" 62" y="-62" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_2" x=" 90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_0" x="-62" y=" 19" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_0" x=" 90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_1" x=" 0" y=" 19" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_1" x=" 90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_2" x=" 62" y=" 19" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_2" x=" 90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_0" x="-62" y="-19" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_0" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_1" x=" 0" y="-19" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_1" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverTop__pos__CoverVytochka_2" x=" 62" y="-19" z=" 1" unit="mm"/>
+<rotation name="CoverTop__rot__CoverVytochka_2" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+</volume>
+<volume name="CoverBottom">
+<materialref ref="D16"/>
+<solidref ref="CoverBottom_PartBody"/>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_0" x="-93" y=" 24.5" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_0" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_1" x="-31" y=" 24.5" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_1" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_2" x=" 31" y=" 24.5" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_2" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_3" x=" 93" y=" 24.5" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_3" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_0" x="-93" y=" 56.5" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_0" x="-90" y="-180" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_1" x="-31" y=" 56.5" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_1" x="-90" y="-180" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_2" x=" 31" y=" 56.5" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_2" x="-90" y="-180" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_3" x=" 93" y=" 56.5" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_3" x="-90" y="-180" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_0" x="-93" y="-56.5" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_0" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_1" x="-31" y="-56.5" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_1" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_2" x=" 31" y="-56.5" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_2" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_3" x=" 93" y="-56.5" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_3" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_0" x="-93" y="-24.5" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_0" x="-90" y="-180" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_1" x="-31" y="-24.5" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_1" x="-90" y="-180" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_2" x=" 31" y="-24.5" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_2" x="-90" y="-180" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_3" x=" 93" y="-24.5" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_3" x="-90" y="-180" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_0" x="-62" y=" 62" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_0" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_1" x=" 0" y=" 62" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_1" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_2" x=" 62" y=" 62" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_2" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_0" x="-62" y="-62" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_0" x="-90" y="-180" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_1" x=" 0" y="-62" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_1" x="-90" y="-180" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_2" x=" 62" y="-62" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_2" x="-90" y="-180" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_0" x="-62" y="-19" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_0" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_1" x=" 0" y="-19" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_1" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_2" x=" 62" y="-19" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_2" x="-90" y=" 0" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_0" x="-62" y=" 19" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_0" x="-90" y="-180" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_1" x=" 0" y=" 19" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_1" x="-90" y="-180" z="-90" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverVytochka"/>
+<position name="CoverBottom__pos__CoverVytochka_2" x=" 62" y=" 19" z=" 1" unit="mm"/>
+<rotation name="CoverBottom__rot__CoverVytochka_2" x="-90" y="-180" z="-90" unit="deg"/>
+</physvol>
+</volume>
+<volume name="casset_cover_front">
+<materialref ref="G4_Cu"/>
+<solidref ref="casset_cover_front_PartBody"/>
+</volume>
+<volume name="casset_cover_top">
+<materialref ref="D16"/>
+<solidref ref="casset_cover_top_PartBody"/>
+</volume>
+<volume name="casset_cover_side">
+<materialref ref="D16"/>
+<solidref ref="casset_cover_side_PartBody"/>
+</volume>
+<volume name="cassete_cover_top_vert">
+<materialref ref="D16"/>
+<solidref ref="cassete_cover_top_vert_PartBody"/>
+</volume>
+<volume name="casset_cover_side_vert">
+<materialref ref="D16"/>
+<solidref ref="casset_cover_side_vert_PartBody"/>
+</volume>
+<volume name="G4Cover">
+<materialref ref="G4_AIR"/>
+<solidref ref="G4Cover_PartBody"/>
+<physvol>
+<volumeref ref="CoverBottom"/>
+<position name="G4Cover_pos_CoverBottom_1" x="0" y="0" z="-36.5" unit="mm"/>
+<rotation name="G4Cover_rot_CoverBottom_1" x="0" y="0" z="0" unit="degree"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverSide"/>
+<position name="G4Cover_pos_CoverSide_1" x="0" y="77.5" z="1" unit="mm"/>
+<rotation name="G4Cover_rot_CoverSide_1" x="0" y="0" z="-180" unit="degree"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverSide"/>
+<position name="G4Cover_pos_CoverSide_2" x="0" y="-77.5" z="1" unit="mm"/>
+<rotation name="G4Cover_rot_CoverSide_2" x="0" y="0" z="0" unit="degree"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverFront2"/>
+<position name="G4Cover_pos_CoverFront2_1" x="-122.5" y="0" z="1" unit="mm"/>
+<rotation name="G4Cover_rot_CoverFront2_1" x="0" y="0" z="-180" unit="degree"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverFront2"/>
+<position name="G4Cover_pos_CoverFront2_2" x="122.5" y="0" z="1" unit="mm"/>
+<rotation name="G4Cover_rot_CoverFront2_2" x="0" y="0" z="0" unit="degree"/>
+</physvol>
+<physvol>
+<volumeref ref="CoverTop"/>
+<position name="G4Cover_pos_CoverTop_1" x="0" y="0" z="38.5" unit="mm"/>
+<rotation name="G4Cover_rot_CoverTop_1" x="0" y="-180" z="0" unit="degree"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_0" x="-114" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_0" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_1" x="-104" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_1" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_2" x="-94" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_2" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_3" x="-84" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_3" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_4" x="-74" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_4" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_5" x="-64" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_5" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_6" x="-54" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_6" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_7" x="-44" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_7" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_8" x="-34" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_8" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_9" x="-24" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_9" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_0" x=" 25" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_0" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_1" x=" 35" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_1" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_2" x=" 45" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_2" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_3" x=" 55" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_3" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_4" x=" 65" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_4" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_5" x=" 75" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_5" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_6" x=" 85" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_6" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_7" x=" 95" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_7" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_8" x=" 105" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_8" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_9" x=" 115" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_9" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_0" x=" .7" y="-2" z="-30.5" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_0" x=" 0" y="-90" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_1" x=" .7" y="-2" z="-20.5" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_1" x=" 0" y="-90" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_0" x=" .7" y="-2" z=" 19.5" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_0" x=" 0" y="-90" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB1"/>
+<position name="G4Cover__pos__PCB1_1" x=" .7" y="-2" z=" 29.5" unit="mm"/>
+<rotation name="G4Cover__rot__PCB1_1" x=" 0" y="-90" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="Shield"/>
+<position name="G4Cover_pos_Shield_1" x="0" y="50" z="-1" unit="mm"/>
+<rotation name="G4Cover_rot_Shield_1" x="0" y="0" z="0" unit="degree"/>
+</physvol>
+<physvol>
+<volumeref ref="si13n2"/>
+<position name="G4Cover_pos_si13n_1" x="0" y="-50" z="0" unit="mm"/>
+<rotation name="G4Cover_rot_si13n_1" x="0" y="-90" z="0" unit="degree"/>
+</physvol>
+<physvol>
+<volumeref ref="si13tube"/>
+<position name="G4Cover_pos_si13tube_1" x="0" y="-50" z="0" unit="mm"/>
+<rotation name="G4Cover_rot_si13tube_1" x="0" y="-90" z="0" unit="degree"/>
+
+</physvol>
+<physvol>
+<volumeref ref="Detector1"/>
+<position name="G4Cover__pos__Detector_0" x=" .7" y=" 10" z="-9.5" unit="mm"/>
+<rotation name="G4Cover__rot__Detector_0" x=" 0" y=" 0" z=" 0" unit="deg"/>
+
+</physvol>
+<physvol>
+<volumeref ref="Detector2"/>
+<position name="G4Cover__pos__Detector_1" x=" .7" y=" 10" z=" 10.5" unit="mm"/>
+<rotation name="G4Cover__rot__Detector_1" x=" 0" y=" 0" z=" 0" unit="deg"/>
+
+</physvol>
+<physvol>
+<volumeref ref="PCB3"/>
+<position name="G4Cover__pos__PCB3_0" x=" .7" y="-2" z="-10.5" unit="mm"/>
+<rotation name="G4Cover__rot__PCB3_0" x=" 0" y="-90" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB3"/>
+<position name="G4Cover__pos__PCB3_1" x=" .7" y="-2" z=" 9.5" unit="mm"/>
+<rotation name="G4Cover__rot__PCB3_1" x=" 0" y="-90" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="PCB2"/>
+<position name="G4Cover_pos_PCB2_1" x="99" y="-33" z="35.25" unit="mm"/>
+<rotation name="G4Cover_rot_PCB2_1" x="0" y="0" z="0" unit="degree"/>
+</physvol>
+<physvol>
+<volumeref ref="casset_cover_front"/>
+<position name="G4Cover__pos__casset_cover_front_0" x=" 20" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__casset_cover_front_0" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="casset_cover_front"/>
+<position name="G4Cover__pos__casset_cover_front_1" x=" 118" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__casset_cover_front_1" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="casset_cover_front"/>
+<position name="G4Cover__pos__casset_cover_front_0" x="-117" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__casset_cover_front_0" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="casset_cover_front"/>
+<position name="G4Cover__pos__casset_cover_front_1" x="-19" y="-2" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__casset_cover_front_1" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="casset_cover_front"/>
+<position name="G4Cover__pos__casset_cover_front_0" x=" .7" y="-2" z="-33" unit="mm"/>
+<rotation name="G4Cover__rot__casset_cover_front_0" x=" 0" y="-90" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="casset_cover_front"/>
+<position name="G4Cover__pos__casset_cover_front_1" x=" .7" y="-2" z=" 33" unit="mm"/>
+<rotation name="G4Cover__rot__casset_cover_front_1" x=" 0" y="-90" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="casset_cover_top"/>
+<position name="G4Cover_pos_casset_cover_top_1" x="-67.25" y="-3" z="7.15" unit="mm"/>
+<rotation name="G4Cover_rot_casset_cover_top_1" x="0" y="0" z="0" unit="degree"/>
+</physvol>
+<physvol>
+<volumeref ref="casset_cover_top"/>
+<position name="G4Cover_pos_casset_cover_top_2" x="68.25" y="-3" z="7.15" unit="mm"/>
+<rotation name="G4Cover_rot_casset_cover_top_2" x="0" y="0" z="0" unit="degree"/>
+</physvol>
+<physvol>
+<volumeref ref="casset_cover_side"/>
+<position name="G4Cover__pos__casset_cover_side_0" x=" 68.25" y="-27.25" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__casset_cover_side_0" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="casset_cover_side"/>
+<position name="G4Cover__pos__casset_cover_side_1" x=" 68.25" y=" 23.75" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__casset_cover_side_1" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="casset_cover_side"/>
+<position name="G4Cover__pos__casset_cover_side_0" x="-67.25" y="-27.25" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__casset_cover_side_0" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="casset_cover_side"/>
+<position name="G4Cover__pos__casset_cover_side_1" x="-67.25" y=" 23.75" z="-10" unit="mm"/>
+<rotation name="G4Cover__rot__casset_cover_side_1" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="cassete_cover_top_vert"/>
+<position name="G4Cover__pos__cassete_cover_top_vert_0" x="-16.5" y="-1.5" z=" .05" unit="mm"/>
+<rotation name="G4Cover__rot__cassete_cover_top_vert_0" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="cassete_cover_top_vert"/>
+<position name="G4Cover__pos__cassete_cover_top_vert_1" x=" 18" y="-1.5" z=" .05" unit="mm"/>
+<rotation name="G4Cover__rot__cassete_cover_top_vert_1" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="casset_cover_side_vert"/>
+<position name="G4Cover__pos__casset_cover_side_vert_0" x=" .65" y="-27.25" z=" .05" unit="mm"/>
+<rotation name="G4Cover__rot__casset_cover_side_vert_0" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+<physvol>
+<volumeref ref="casset_cover_side_vert"/>
+<position name="G4Cover__pos__casset_cover_side_vert_1" x=" .65" y=" 23.75" z=" .05" unit="mm"/>
+<rotation name="G4Cover__rot__casset_cover_side_vert_1" x=" 0" y=" 0" z=" 0" unit="deg"/>
+</physvol>
+</volume>
+<volume name="G4World">
+<materialref ref="G4_AIR"/>
+<solidref ref="G4World_PartBody"/>
+<physvol>
+<volumeref ref="G4Cover"/>
+<position name="G4World_pos_G4Cover_1" x="0" y="0" z="0" unit="mm"/>
+<rotation name="G4World_rot_G4Cover_1" x="0" y="0" z="0" unit="degree"/>
+</physvol>
+</volume>
+</structure>
+<setup name="FAIRgeom" version="1.0">
+<world ref="G4World"/>
+</setup>
+</gdml>
+\end{lstlisting}
+
+\subsection{Список использованных материалов для создания модели в geant4}
+
+\label{list:geamtmaterials}
+\tiny{
+\begin{verbatim}
+***** Table : Nb of materials = 14 *****
+
+Material:      He3    density:  0.670 kg/m3   RadL:   1.061 km   Nucl.Int.Length: 757.722 m  
+Imean:  41.800 eV   temperature: 273.15 K  pressure:   1.00 atm
+
+--->  Element: he3_ele ()   Z =  2.0   N =   3.0   A =   3.02 g/mole
+--->  Isotope: he3_iso   Z =  2   N =   3   A =   3.02 g/mole   abundance: 100.00 %
+ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
-\begin{comment}
+Material:      PCB    density:  2.310 g/cm3   RadL:  15.331 cm   Nucl.Int.Length:  34.052 cm 
+Imean:  78.639 eV 
 
-\chapter{Очень длинное название второго приложения, в котором продемонстрирована работа с длинными таблицами} \label{AppendixD}
+--->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+--->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+--->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+ElmMassFraction:   5.70 %  ElmAbundance  45.26 % 
 
- \section{Подраздел приложения}\label{AppendixB1}
-Вот размещается длинная таблица:
-\fontsize{10pt}{10pt}\selectfont
-\begin{longtable}[c]{|l|c|l|l|}
-% \caption{Описание входных файлов модели}\label{Namelists} 
-%\\ 
- \hline
- %\multicolumn{4}{|c|}{\textbf{Файл puma\_namelist}}        \\ \hline
- Параметр & Умолч. & Тип & Описание               \\ \hline
-                                              \endfirsthead   \hline
- \multicolumn{4}{|c|}{\small\slshape (продолжение)}        \\ \hline
- Параметр & Умолч. & Тип & Описание               \\ \hline
-                                              \endhead        \hline
- \multicolumn{4}{|r|}{\small\slshape продолжение следует}  \\ \hline
-                                              \endfoot        \hline
-                                              \endlastfoot
- \multicolumn{4}{|l|}{\&INP}        \\ \hline 
- kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
- kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
- \hline
-  %& & & $\:$ \\ 
- \multicolumn{4}{|l|}{\&SURFPAR}        \\ \hline
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-      &   &     & 1: генерация белого шума                  \\
-      &   &     & 2: генерация белого шума симметрично относительно \\
-  & & & экватора    \\
- mars & 0 & int & 1: инициализация модели для планеты Марс     \\ 
- \hline 
-\end{longtable}
+--->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+--->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+--->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+ElmMassFraction:  61.70 %  ElmAbundance  41.15 % 
 
-\normalsize% возвращаем шрифт к нормальному
-\end{comment}
+--->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+--->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+--->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+--->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+ElmMassFraction:  24.65 %  ElmAbundance  12.34 % 
 
-\begin{comment}
-\section{Ещё один подраздел приложения} \label{AppendixB2}
+--->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+--->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+--->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+--->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+ElmMassFraction:   1.57 %  ElmAbundance   0.45 % 
 
-Нужно больше подразделов приложения!
+--->  Element: Cu (Cu)   Z = 29.0   N =  63.6   A =  63.55 g/mole
+--->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+--->  Isotope:  Cu65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %
+ElmMassFraction:   6.39 %  ElmAbundance   0.81 % 
 
-Пример длинной таблицы с записью продолжения по ГОСТ 2.105
 
-    \centering
-	\small
-    \begin{longtable}[c]{|l|c|l|l|}
-	\caption{Наименование таблицы средней длины}%
-    \label{tbl:test5}% label всегда желательно идти после caption
-    \\ 
-    \hline
-     %\multicolumn{4}{|c|}{\textbf{Файл puma\_namelist}}        \\ \hline
-     Параметр & Умолч. & Тип & Описание               \\ \hline
-                                                  \endfirsthead
-%     \multicolumn{4}{|c|}{\small\slshape (продолжение)}        \\ \hline
- \captionsetup{format=tablenocaption,labelformat=continued}% должен стоять до самого caption
- \caption[]{} \\
-    \hline
-     Параметр & Умолч. & Тип & Описание               \\ \hline
-                                                  \endhead        \hline
-%     \multicolumn{4}{|r|}{\small\slshape продолжение следует}  \\
-%\hline
-                                                  \endfoot        \hline
-                                                  \endlastfoot
-     \multicolumn{4}{|l|}{\&INP}        \\ \hline 
-     kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-     kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-     \hline
-      %& & & $\:$ \\ 
-     \multicolumn{4}{|l|}{\&SURFPAR}        \\ \hline
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\
-    kick & 1 & int & 0: инициализация без шума ($p_s = const$) \\
-          &   &     & 1: генерация белого шума                  \\
-          &   &     & 2: генерация белого шума симметрично относительно \\
-      & & & экватора    \\
-     mars & 0 & int & 1: инициализация модели для планеты Марс     \\ 
-     \hline 
-    \end{longtable}
-\normalsize% возвращаем шрифт к нормальному
-\end{comment}
+Material:     G4_H    density:  0.084 kg/m3   RadL:   7.528 km   Nucl.Int.Length:   4.212 km 
+Imean:  19.200 eV   temperature: 273.15 K  pressure:   1.00 atm
+
+--->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+--->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+--->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+Material:     G4_C    density:  2.000 g/cm3   RadL:  21.349 cm   Nucl.Int.Length:  40.077 cm 
+Imean:  81.000 eV 
+
+--->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+--->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+--->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+Material:     G4_O    density:  1.332 mg/cm3  RadL: 257.138 m    Nucl.Int.Length: 662.215 m  
+Imean:  95.000 eV   temperature: 273.15 K  pressure:   1.00 atm
+
+--->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+--->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+--->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+--->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+Material:    G4_Si    density:  2.330 g/cm3   RadL:   9.366 cm   Nucl.Int.Length:  45.635 cm 
+Imean: 173.000 eV 
+
+--->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+--->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+--->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+--->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+Material:    G4_Cu    density:  8.960 g/cm3   RadL:   1.436 cm   Nucl.Int.Length:  15.576 cm 
+Imean: 322.000 eV 
+
+--->  Element: Cu (Cu)   Z = 29.0   N =  63.6   A =  63.55 g/mole
+--->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+--->  Isotope:  Cu65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %
+ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+Material:      D16    density:  2.770 g/cm3   RadL:   8.237 cm   Nucl.Int.Length:  38.462 cm 
+Imean: 172.393 eV 
+
+--->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+--->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+--->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+--->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+--->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+ElmMassFraction:   0.50 %  ElmAbundance   0.25 % 
+
+--->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+--->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+--->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+--->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+ElmMassFraction:   0.50 %  ElmAbundance   0.50 % 
+
+--->  Element: Mn (Mn)   Z = 25.0   N =  55.0   A =  54.94 g/mole
+--->  Isotope:  Mn55   Z = 25   N =  55   A =  54.94 g/mole   abundance: 100.00 %
+ElmMassFraction:   0.90 %  ElmAbundance   0.46 % 
+
+--->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+--->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+ElmMassFraction:  93.02 %  ElmAbundance  96.43 % 
+
+--->  Element: Cu (Cu)   Z = 29.0   N =  63.6   A =  63.55 g/mole
+--->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+--->  Isotope:  Cu65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %
+ElmMassFraction:   4.90 %  ElmAbundance   2.16 % 
+
+--->  Element: Mg (Mg)   Z = 12.0   N =  24.3   A =  24.31 g/mole
+--->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance:  78.99 %
+--->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance:  10.00 %
+--->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance:  11.01 %
+ElmMassFraction:   0.18 %  ElmAbundance   0.21 % 
+
+
+Material:    G4_Fe    density:  7.874 g/cm3   RadL:   1.757 cm   Nucl.Int.Length:  16.977 cm 
+Imean: 286.000 eV 
+
+--->  Element: Fe (Fe)   Z = 26.0   N =  55.9   A =  55.85 g/mole
+--->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+--->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+--->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+--->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+Material:    G4_Mn    density:  7.440 g/cm3   RadL:   1.968 cm   Nucl.Int.Length:  17.870 cm 
+Imean: 272.000 eV 
+
+--->  Element: Mn (Mn)   Z = 25.0   N =  55.0   A =  54.94 g/mole
+--->  Isotope:  Mn55   Z = 25   N =  55   A =  54.94 g/mole   abundance: 100.00 %
+ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm 
+Imean: 166.000 eV 
+
+--->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+--->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+Material:    G4_Mg    density:  1.740 g/cm3   RadL:  14.386 cm   Nucl.Int.Length:  58.242 cm 
+Imean: 156.000 eV 
+
+--->  Element: Mg (Mg)   Z = 12.0   N =  24.3   A =  24.31 g/mole
+--->  Isotope:  Mg24   Z = 12   N =  24   A =  23.98 g/mole   abundance:  78.99 %
+--->  Isotope:  Mg25   Z = 12   N =  25   A =  24.99 g/mole   abundance:  10.00 %
+--->  Isotope:  Mg26   Z = 12   N =  26   A =  25.98 g/mole   abundance:  11.01 %
+ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+Material:   G4_AIR    density:  1.205 mg/cm3  RadL: 303.921 m    Nucl.Int.Length: 710.137 m  
+Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
+
+--->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+--->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+--->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+ElmMassFraction:   0.01 %  ElmAbundance   0.02 % 
+
+--->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+--->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+--->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
+ElmMassFraction:  75.53 %  ElmAbundance  78.44 % 
+
+--->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+--->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+--->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+--->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+ElmMassFraction:  23.18 %  ElmAbundance  21.07 % 
+
+--->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
+--->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+--->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+--->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
+ElmMassFraction:   1.28 %  ElmAbundance   0.47 % 
+
+
+Material: G4_PLEXIGLASS    density:  1.190 g/cm3   RadL:  34.075 cm   Nucl.Int.Length:  62.751 cm 
+Imean:  74.000 eV 
+
+--->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+--->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+--->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+ElmMassFraction:  59.98 %  ElmAbundance  33.33 % 
+
+--->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+--->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+--->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+ElmMassFraction:   8.05 %  ElmAbundance  53.33 % 
+
+--->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+--->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+--->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+--->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+ElmMassFraction:  31.96 %  ElmAbundance  13.33 % 
+\end{verbatim}
+}
