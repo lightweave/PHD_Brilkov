@@ -1,0 +1,45 @@
+﻿
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch and 'origin/master' have diverged,
+# and have 1 and 7 different commits each, respectively.
+#   (use "git pull" to merge the remote branch into yours)
+#
+# You are currently rebasing branch 'master' on 'f764d33'.
+#
+# Changes to be committed:
+#	modified:   Dissertation/part1.tex
+#	new file:   literature_repository/relelec/baker2013.pdf
+#	new file:   literature_repository/relelec/borovsky2010 (1).pdf
+#	new file:   literature_repository/relelec/borovsky2010.pdf
+#	new file:   literature_repository/relelec/borovsky2011.pdf
+#	new file:   literature_repository/relelec/brautigam2001.pdf
+#	new file:   literature_repository/relelec/elibrary_17679658_97242104.pdf
+#	new file:   literature_repository/relelec/gussenhoven1991.pdf
+#	new file:   literature_repository/relelec/gussenhoven1997.pdf
+#	new file:   literature_repository/relelec/hendry2016.pdf
+#
+# Untracked files:
+#	Dissertation/part1_BACKUP_10676.tex
+#	Dissertation/part1_BACKUP_10872.tex
+#	Dissertation/part1_BACKUP_11836.tex
+#	Dissertation/part1_BACKUP_12100.tex
+#	Dissertation/part1_BACKUP_6496.tex
+#	Dissertation/part1_BASE_10676.tex
+#	Dissertation/part1_BASE_10872.tex
+#	Dissertation/part1_BASE_11836.tex
+#	Dissertation/part1_BASE_12100.tex
+#	Dissertation/part1_BASE_6496.tex
+#	Dissertation/part1_LOCAL_10676.tex
+#	Dissertation/part1_LOCAL_10872.tex
+#	Dissertation/part1_LOCAL_11836.tex
+#	Dissertation/part1_LOCAL_12100.tex
+#	Dissertation/part1_LOCAL_6496.tex
+#	Dissertation/part1_REMOTE_10676.tex
+#	Dissertation/part1_REMOTE_10872.tex
+#	Dissertation/part1_REMOTE_11836.tex
+#	Dissertation/part1_REMOTE_12100.tex
+#	Dissertation/part1_REMOTE_6496.tex
+#
+
