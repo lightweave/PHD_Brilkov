@@ -1,0 +1,154 @@
+@article{zolotarev2017numerical51590279,
+    author = "Zolotarev, I. A. and Novikov, L. S. and Osedlo, V. I. and Tulupov, V. I. and Chirskaya, N. P.",
+    title = "Numerical Simulation of Metrological Characteristics of Cosmic Radiation Detectors",
+    journal = "Inorganic Materials: Applied Research",
+    year = "2017",
+    volume = "8",
+    number = "2",
+    issn = "2075-115X",
+    doi = "10.1134/S2075113317020241",
+    pages = "222--228",
+    annote = "In this paper, we describe the methods and results of mathematical simulation of the interaction between cosmic rays and detectors. This has increased the accuracy of determining the level of radiation impact on materials and components of spacecraft. The application of the results obtained in the design and production of advanced spacecraft will significantly increase the reliability and extend the service time under the cosmic radiation exposure.",
+    language = "english"
+}
+@article{vlasova2017optimization27547274,
+    author = "Panasyuk, M. I. and Podzolko, M. V. and Kovtyukh, A. S. and Brilkov, I. A. and Vlasova, N. A. and Kalegaev, V. V. and Osedlo, V. I. and Tulupov, V. I. and Yashin, I. V.",
+    title = "Optimization of measurements of the Earth’s radiation belt particle fluxes",
+    journal = "Cosmic Research (English translation of Kosimicheskie Issledovaniya)",
+    year = "2017",
+    volume = "55",
+    number = "2",
+    issn = "1608-3075; 0010-9525",
+    doi = "10.1134/S0010952516060071",
+    pages = "79--87",
+    publisher = "Russian Federation",
+    address = "Russian Federation",
+    annote = "The Earth’s radiation belts discovered at the end of the 1950s have great scientific and practical interest. Their main characteristics in magnetically quiet periods are well known. However, the dynamics of the Earth’s radiation belts during magnetic storms and substorms, particularly the dynamics of relativistic electrons of the outer belt, when Earth’s radiation belt particle fluxes undergo significant time variations, is studied insufficiently. At present, principally new experiments have been performed and planned with the intention to better study the dynamics of the Earth’s radiation belts and to operationally control the space-energy distributions of the Earth’s radiation belt particle fluxes. In this paper, for spacecraft designed to measure the fluxes of electrons and protons of the Earth’s radiation belts at altitudes of 500–10000 km, the optimal versions for detector orientation and orbital parameters have been considered and selected.",
+    language = "english"
+}
+@article{vlasova2017optimizatsiya27177808,
+    author = "Панасюк, М. И. and Подзолко, М. В. and Ковтюх, А. С. and Брильков, И. А. and Власова, Н. А. and Калегаев, В. В. and Оседло, В. И. and Тулупов, В. И. and Яшин, И. В.",
+    title = "Оптимизация измерений потоков частиц радиационных поясов Земли",
+    journal = "Космические исследования",
+    year = "2017",
+    volume = "55",
+    number = "2",
+    issn = "0023-4206",
+    doi = "10.7868/S002342061606008X",
+    pages = "85--93",
+    publisher = "Москва",
+    address = "Москва",
+    annote = "Радиационные пояса Земли (РПЗ), открытые в конце 1950-х годов, имеют большой научный и практический интерес. Основные их характеристики в магнитно-спокойные периоды хорошо известны. Однако динамика РПЗ во время магнитных бурь и суббурь, особенно динамика релятивистских электронов внешнего пояса, когда потоки частиц РПЗ испытывают значительные временные вариации, изучена пока недостаточно. В настоящее время проводятся и планируются принципиально новые эксперименты, предназначенные для более полного изучения динамики РПЗ и оперативного контроля пространственно-энергетических распределений потоков частиц РПЗ. В данной работе, для космических аппаратов, предназначенных для измерений потоков электронов и протонов РПЗ на высотах от 0.5 до 10 тысяч км, рассматриваются и отбираются оптимальные варианты ориентации детекторов и параметров орбит.",
+    language = "russian"
+}
+@inproceedings{grafodatsky2016development29907367,
+    author = "Panasyuk, M. I. and Yashin, I. V. and Podzolko, M. V. and Kovtyukh, A. S. and Brilkov, I. A. and Kalegaev, V. V. and Osedlo, V. I. and Vlasova, N. A. and Tulupov, V. I. and Grafodatskiy, O. S. and Ishin, S. V. and Lemeshevskiy, S. A. and Teselkin, S. F.",
+    title = "Development of a system of multiple small satellites for space radiation monitoring",
+    booktitle = "Proceedings of 67th International Astronautical Congress, Guadalajara, Mexico, 26–30 September 2016",
+    year = "2016",
+    pages = "IAC-16,B4,3,x35597",
+    publisher = "Guadalajara, Mexico",
+    annote = "The fluxes of energetic particles near the Earth pose a significant radiation threat to spacecraft electronic. At the same time the fluxes of particles in Earth’s radiation belts even during geomagnetically quiet conditions experience mid- and long-term variations within several orders of magnitude. Therefore using the existing static empirical models of Earth’s radiation belts to estimate radiation conditions in spacecraft orbits is not always appropriate.
+For that reason Skobeltsyn Institute of Nuclear Physics of Moscow State University (SINP MSU) is developing a system of small spacecraft for operative (close to “real time”) monitoring of radiation conditions in the near-Earth’s space.
+Several small spacecraft with a mass of <50–100 kg should be launched to different circular orbits or a specifically selected elliptical orbit, crossing the wide range of magnetic drift shells at different altitudes; measure fluxes of energetic electrons and protons by multidirectional detectors; and promptly transmit the data of measurements to the ground using satellite retranslation systems. In the ground data-center on the basis of these data the distribution of particle fluxes in the whole Earth’s radiation belts (up to GEO) will be computed. Finally the end-user will be able to access the data center by the web and find out current radiation conditions in the near-Earth’s space or in a particular orbit.
+Other applications of received experimental data will be: developing the new (possibly dynamical) Earth’s radiation belt models, and studying the problems of Earth’s magnetosphere physics.
+For placing satellites into orbit it is planned to take advantage of accompanied launch by “Soyuz” rocket with “Frigate” upper stage developed by NPO Lavochkin, for example during launch of main payload into “Molniya”-type orbit. Alternatives are using the light-class space rocket or rising from LEO by using compact electric rocket engine.
+Currently the first research stage of this project is being carried out under the contract with Ministry of Education and Science of Russia, during which the optimal spacecraft orbits and detector construction and placement are being determined.",
+    language = "english"
+}
+@inproceedings{grafodatsky2016development21020642,
+    author = "Panasyuk, M. I. and Yashin, I. V. and Podzolko, M. V. and Kovtyukh, A. S. and Brilkov, I. A. and Kalegaev, V. V. and Osedlo, V. I. and Tulupov, V. I. and Vlasova, N. A. and Grafodatskiy, O. S. and Ishin, S. V. and Lemeshevskiy, S. A. and Teselkin, S. F.",
+    title = "Development of multispacecraft system for radiation monitoring",
+    booktitle = "International Worksop {"}The Future of Nanosatellites{"}, 22–23 March 2016, Grenoble, France",
+    year = "2016",
+    pages = "20",
+    language = "english"
+}
+@inproceedings{zolotarev2016modelirovanie36997161,
+    author = "Золотарев, И. А. and Новиков, Л. С. and Оседло, В. И. and Тулупов, В. И. and Чирская, Н. П.",
+    title = "Моделирование характеристик детектора космических излучений",
+    booktitle = "Труды XVII Межвузовской научной школы молодых специалистов {"}Концентрированные потоки энергии в космической технике, электронике, экологии и медицине{"}",
+    year = "2016",
+    pages = "126--130",
+    publisher = "Университетская книга Москва",
+    language = "russian"
+}
+@article{zolotarev2016chislennoe32150868,
+    author = "Золотарев, И. А. and Новиков, Л. С. and Оседло, В. И. and Тулупов, В. И. and Чирская, Н. П.",
+    title = "Численное моделирование метрологических характеристик детекторов космических излучений",
+    journal = "Перспективные материалы",
+    year = "2016",
+    number = "11",
+    issn = "1028-978X",
+    pages = "16--24",
+    publisher = "М.",
+    address = "М.",
+    language = "russian"
+}
+@article{vlasova2015operational11246447,
+    author = "Panasyuk, M. I. and Podzolko, M. V. and Kovtyukh, A. S. and Brilkov, I. A. and Vlasova, N. A. and Kalegaev, V. V. and Osedlo, V. I. and Tulupov, V. I. and Yashin, I. V.",
+    title = "Operational radiation monitoring in near-Earth space based on the system of multiple small satellites",
+    journal = "Cosmic Research (English translation of Kosimicheskie Issledovaniya)",
+    year = "2015",
+    volume = "53",
+    number = "6",
+    issn = "1608-3075; 0010-9525",
+    doi = "10.1134/S0010952515060039",
+    pages = "423--429",
+    publisher = "Russian Federation",
+    address = "Russian Federation",
+    annote = "The operational monitoring of radiation conditions in different orbits in near-Earth space is crucial for ensuring the radiation safety of space flights. The intensity of ionizing radiation fluxes in near-Earth space varies within several orders of magnitude. Therefore, existing averaged empirical models cannot always be used to estimate specific radiation conditions in orbits. The forecast of solar cosmic rays is even less reliable. This paper presents a version of the global system of radiation monitoring in near-Earth space based on the system of multiple small satellites. The considered system of satellites with identical radiometric equipment will provide operational information on the fluxes of electrons and protons of Earth radiation belts and solar cosmic rays, which will make it possible to create 3D pictures of the distribution of particle fluxes in real time.",
+    language = "english"
+}
+@article{vlasova2015operativnyi11246403,
+    author = "Панасюк, М. И. and Подзолко, М. В. and Ковтюх, А. С. and Брильков, И. А. and Власова, Н. А. and Калегаев, В. В. and Оседло, В. И. and Тулупов, В. И. and Яшин, И. В.",
+    title = "Оперативный радиационный мониторинг в околоземном космическом пространстве на базе многоярусной группировки малых космических аппаратов",
+    journal = "Космические исследования",
+    year = "2015",
+    volume = "53",
+    number = "6",
+    issn = "0023-4206",
+    doi = "10.7868/S0023420615060047",
+    pages = "461--468",
+    publisher = "Москва",
+    address = "Москва",
+    annote = "Оперативный мониторинг радиационных условий на разных орбитах в околоземном космическом пространстве имеет исключительно большое значение для обеспечения радиационной безопасности космических полетов. Интенсивности потоков ионизирующих излучений в околоземном космическом пространстве изменяются в пределах нескольких порядков величин. Поэтому имеющиеся усредненные эмпирические модели не всегда могут служить для оценки конкретных радиационных условий на орбитах. Еще менее надежен прогноз по солнечным космическим лучам. В данной работе представлен вариант системы глобального радиационного мониторинга в околоземном космическом пространстве на базе многоярусной группировки малых космических аппаратов. Рассматриваемая группировка спутников с идентичной радиационной аппаратурой обеспечит оперативную информацию о потоках электронов и протонов радиационных поясов Земли и солнечных космических лучей, что позволит воспроизвести трехмерные картины распределения потоков частиц в реальном времени.",
+    language = "russian"
+}
+@inproceedings{vlasova2015sozdanie9633838,
+    author = "Панасюк, М. И. and Яшин, И. В. and Брильков, И. А. and Власова, Н. А. and Калегаев, В. В. and Ковтюх, А. С. and Оседло, В. И. and Подзолко, М. В. and Тулупов, В. И. and Рябиков, В. М. and Туманов, М. В.",
+    title = "Создание группировки малых космических аппаратов для осуществления радиационного мониторинга в околоземном космическом пространстве",
+    booktitle = "Исследования солнечно-земных связей: Материалы научной сессии Секции солнечно-земных связей Совета по космосу Российской академии наук, под ред. А. А. Петруковича",
+    year = "2015",
+    pages = "141--153",
+    publisher = "М.: ИКИ РАН",
+    annote = "Потоки ионизирующих излучений в околоземном космическом пространстве варьируются на порядки величины, поэтому имеющиеся усреднённые эмпирические модели радиационных поясов Земли не всегда могут служить для оценки радиационных условий на орбитах. НИИЯФ МГУ совместно с НИИЭМ ведут разработку группировки малых спутников для оперативного мониторинга радиационных условий в околоземном космическом пространстве. Несколько малых космических аппаратов должны быть выведены на разные круговые или эллиптические орбиты, измерять пространственно-энергетическое распределение потоков энергичных протонов и электронов в околоземном пространстве и оперативно передавать данные измерений на Землю через спутниковые системы ретрансляции данных. На данном этапе рассматриваются, просчитываются и отбираются оптимальные варианты орбит космических аппаратов группировки, а также состава и размещения измерительной аппаратуры.",
+    language = "russian"
+}
+@inproceedings{amelyushkin2015sozdanie10657329,
+    author = "Петров, В. Л. and Климов, П. А. and Брильков, И. А. and Амелюшкин, А. М. and Горбовской, Е. С.",
+    title = "Создание и подготовка к запуску комплекса научной аппаратуры для астрофизических и космофизических исследований на борту спутника {\flqq}Ломоносов{\frqq}",
+    booktitle = "Космодром {\flqq}Восточный{\frqq} и перспективы развития российской космонавтики{\frqq}: тезисы докладов Всероссийской молодёжной научно-практической конференции (05-06 июня 2015 г., г. Благовещенск)",
+    year = "2015",
+    pages = "150--150",
+    publisher = "Самарский государственный аэрокосмический университет Самара",
+    language = "russian"
+}
+@inproceedings{angelopoulos2011university1295357,
+    author = "Panasyuk, M. I. and Amelyushkin, A. M. and Angelopoulos, V. and Benghin, V. V. and Brilkov, I. A. and Garipov, G. K. and Khrenov, B. A. and Klimov, P. A. and Osedlo, V. I. and Park, I. H. and Petrov, V. L. and Radchenko, V. V. and Shprits, Y. Y. and Svertilov, S. I. and Tulupov, V. I. and Vedenkin, N. N. and Yashin, I. V.",
+    title = "University satellites development program",
+    booktitle = "Physics of Auroral Phenomena”, Proc. XXXIII Annual Seminar",
+    year = "2011",
+    pages = "140--143",
+    publisher = "Apatity",
+    language = "english"
+}
+@inproceedings{angelopoulos2010university5851829,
+    author = "Panasyuk, M. I. and Amelyushkin, A. M. and Angelopoulos, V. and Benghin, V. V. and Brilkov, I. A. and Garipov, G. K. and Khrenov, B. A. and Klimov, P. A. and Park, I. H. and Petrov, V. L. and Shprits, Y. Y. and Svertilov, S. I. and Tulupov, V. I. and Vedenkin, N. N. and Yashin, I. V.",
+    title = "University satellites development program",
+    booktitle = "33-rd Annual Seminar Physics of Auroral Phenomena",
+    year = "2010",
+    pages = "65--65",
+    publisher = "Apatity",
+    language = "english"
+}
