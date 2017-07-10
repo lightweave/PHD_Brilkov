@@ -688,7 +688,8 @@ data.sec$timestamp.start, units = "secs")
 
 \chapter{Листинги программного кода моделирования ДЭПРОН} \label{AppendixС}
 \begin{lstlisting}[language=XML, firstline=1, lastline=89]
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
+
 <gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
 <define>
 <position name="central" x="0" y="0" z="0" unit="mm"/>
@@ -697,11 +698,21 @@ data.sec$timestamp.start, units = "secs")
 </define>
 <materials>
 
-<isotope name="he3_iso" Z="2" N="3"><atom type="A" value="3.0160293"/></isotope> 
+<isotope name="he3_iso" Z="2" N="3">
+<atom type="A" value="3.0160293"/>
+</isotope> 
 
-<element name="he3_ele" ><fraction n="1" ref="he3_iso" /></element>
 
-<material formula="he" name="He3" ><D value="0.00066975" /><fraction n="1" ref="he3_ele" /></material>
+<element name="he3_ele" >
+<fraction n="1" ref="he3_iso" />
+</element>
+
+
+<material formula="he" name="He3" >
+<D value="0.00066975" />
+<fraction n="1" ref="he3_ele" />
+</material>
+
 
 <material name="PCB" state="solid">
 <D value="2.31"  unit="g/cm3"/>
@@ -805,10 +816,14 @@ G4Material::AddMaterial WARNING !! for D16 sum of fractional masses 0.0874738 is
 <volume name="si13n1">
 <materialref ref="He3"/>
 <solidref ref="si13n_PartBody"/>
-</volume>
-<volume name="si13n2">
-<materialref ref="He3"/>
-<solidref ref="si13n_PartBody"/>
+</volume>
+
+<volume name="si13n2">
+
+<materialref ref="He3"/>
+
+<solidref ref="si13n_PartBody"/>
+
 </volume>
 <volume name="Detector1">
 <materialref ref="G4_Si"/>
@@ -1667,10 +1682,11 @@ G4Material::AddMaterial WARNING !! for D16 sum of fractional masses 0.0874738 is
 <setup name="FAIRgeom" version="1.0">
 <world ref="G4World"/>
 </setup>
-</gdml>
+</gdml>
+
 \end{lstlisting}
 
-\subsection{Список использованных материалов для создания модели в geant4}
+\section{Список использованных материалов для создания модели в geant4}
 
 \label{list:geamtmaterials}
 \tiny{
@@ -1882,7 +1898,7 @@ ElmMassFraction:   8.05 %  ElmAbundance  53.33 %
 ElmMassFraction:  31.96 %  ElmAbundance  13.33 % 
 \end{verbatim}
 }
-\subsection{Список процессов для нейтронов использованных при моделировании в geant4}
+\section{Список процессов для нейтронов использованных при моделировании в geant4}
 
 \label{list:geantNeuproc}
 \tiny{
